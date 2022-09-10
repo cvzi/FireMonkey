@@ -3,7 +3,7 @@ name: Checkout new source
 on:
   workflow_dispatch:
   schedule:
-    - cron: "46 2 * * *" # UTC
+    - cron: "46 2,14 * * *" # UTC
     
 concurrency:
   group: update-code-${{ github.ref }}
