@@ -1,0 +1,34 @@
+name: Checkout new source
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "46 2 * * *" # UTC
+    
+concurrency:
+  group: update-code-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fetchXPI:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - uses: actions/checkout@v3
+    - name: git config
+      run: |
+        git config --global user.name github-actions
+        git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
+        git pull --ff-only
+    - name: Download and extract .xpi
+      run: |
+        filename=$(wget -nv https://addons.mozilla.org/firefox/downloads/latest/firemonkey/addon-3991511-latest.xpi 2>&1 |cut -d\" -f2)
+        unzip $filename
+        rm $filename
+        git add --all
+    - name: git commit & push
+      run: |
+        # Use "|| true" or "--allow-empty"  otherwise the action fails for empty commits
+        git commit -m "Update from .xpi" || true
+        git push
+
