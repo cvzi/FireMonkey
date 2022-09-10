@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Popup</title>
+    <link rel="stylesheet" href="popup.css">
+
+    <!-- custom style -->
+    <style></style>
+
+    <script type="module" src="popup.js"></script>
+  </head>
+  <body>
+    <article>
+
+      <section class="main">
+        <!-- template -->
+        <template><li><span class="enable">&#x2714;</span><span class="name"></span></li></template>
+
+        <input type="checkbox" id="listJS" class="control" checked>
+        <input type="checkbox" id="listCSS" class="control" checked>
+
+        <h3 class="flex list">
+          <span data-i18n="tabScript"></span>
+          <label for="listJS"><img src="../image/js.svg" alt=""></label>
+          <label for="listCSS"><img src="../image/css.svg" alt=""></label>
+          <span class="frame">&nbsp;&nbsp;</span>
+        </h3>
+        <ul class="tab"></ul>
+
+        <h3 data-i18n="otherScript"></h3>
+        <ul class="other"></ul>
+
+        <h3 class="menu command" data-i18n="scriptCommands">&#x1f4e3; </h3>
+        <h3 class="menu scratch" data-i18n="scratchpad">&#x1f4dd; </h3>
+        <h3 class="menu findScript" data-i18n="findScript">&#x1f50d; </h3>
+
+        <div class="flex">
+          <button type="button" data-i18n="options"><img src="../image/gear.svg" alt=""> </button>
+          <button type="button" data-i18n="newJS|title"><span class="plus">&#x2795;</span> <img src="../image/js.svg" alt=""></button>
+          <button type="button" data-i18n="newCSS|title"><span class="plus">&#x2795;</span> <img src="../image/css.svg" alt=""></button>
+          <button type="button" data-i18n="help"></button>
+        </div>
+      </section>
+
+      <section class="info">
+        <h3><span data-i18n="back"><img src="../image/back.svg" alt=""> </span></h3>
+
+        <div class="infoList">
+          <dl></dl>
+          <div class="button flex edit">
+            <button type="button" data-i18n="edit">&#x1f58c; </button>
+            <button type="button" id="infoRun" data-i18n="run">&#x25b7; </button>
+            <button type="button" id="infoUndo" data-i18n="undo">&#x25c1; </button>
+          </div>
+        </div>
+
+        <dl class="commandList"></dl>
+
+        <div class="scratchpad">
+          <h2>JavaScript <img class="bin scraptchpadJS" src="../image/bin.svg" data-i18n="delete|title" alt=""></h2>
+          <textarea id="js" rows="8" spellcheck="false"></textarea>
+
+          <div class="button flex">
+            <button type="button" id="jsBtn" data-i18n="run">&#x25b7; </button>
+          </div>
+
+          <h2>CSS <img class="bin scraptchpadCSS" src="../image/bin.svg" data-i18n="delete|title" alt=""></h2>
+          <textarea id="css" rows="8" spellcheck="false"></textarea>
+
+          <div class="button flex">
+            <button type="button" id="cssBtn" data-i18n="run">&#x25b7; </button>
+            <button type="button" id="undo" data-i18n="undo">&#x25c1; </button>
+          </div>
+        </div>
+
+      </section>
+
+    </article>
+  </body>
+</html>
