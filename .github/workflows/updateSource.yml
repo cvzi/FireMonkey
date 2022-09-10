@@ -23,7 +23,7 @@ jobs:
     - name: Download and extract .xpi
       run: |
         filename=$(wget -nv https://addons.mozilla.org/firefox/downloads/latest/firemonkey/addon-3991511-latest.xpi 2>&1 |cut -d\" -f2)
-        unzip $filename
+        unzip -o $filename
         rm $filename
         git add --all
     - name: git commit & push
