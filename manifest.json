@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
-  "version": "2.60",
+  "version": "2.61",
   "default_locale": "en",
   "homepage_url": "https://github.com/erosman/support",
   "author": "erosman",
@@ -20,15 +20,15 @@
     "api_script": "content/api.js"
   },
   "options_ui": {
-    "page": "content/options.html",
+    "browser_style": true,
     "open_in_tab": true,
-    "browser_style": true
+    "page": "content/options.html"
   },
   "browser_action": {
     "browser_style": true,
     "default_icon": "image/icon.svg",
-    "default_title": "__MSG_extensionName__",
-    "default_popup": "content/popup.html"
+    "default_popup": "content/popup.html",
+    "default_title": "__MSG_extensionName__"
   },
   "permissions": [
     "clipboardWrite",

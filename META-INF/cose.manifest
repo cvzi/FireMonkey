@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 
 Name: manifest.json
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: frZ88IWBPKch3XhXG0jRTG9vMsc=
-SHA256-Digest: 6GbLVBcNrHFie/Waq4HKO3zNzVadsDeukiwXgL+//JM=
+SHA1-Digest: Ri2MscZ/Irj0Yr97zR0biqGXjkk=
+SHA256-Digest: WzcHdQumadBjinqlkIQPiUb+wZuw8H23Qsy4RDVbc08=
 
 Name: _locales/en/messages.json
 Digest-Algorithms: SHA1 SHA256
@@ -47,8 +47,8 @@ SHA256-Digest: Chs9BOfnXssYTiTZpJt7RzEYp2PCn71Er37ev87vwK8=
 
 Name: content/install.html
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: hyDy2F2M84ZYrY1v6NTI0P+TkNU=
-SHA256-Digest: F5MGiT2McHDP5oJ15KydQwFOodbMiguOF+S1xgD3kQ8=
+SHA1-Digest: whshew+Vtx2csp5zSPdboyAJd84=
+SHA256-Digest: j2CDrjaYCbMi6htEnKmldxfl3rttXwq5hv1sWiv5Yek=
 
 Name: content/api-plus.js
 Digest-Algorithms: SHA1 SHA256
@@ -67,8 +67,8 @@ SHA256-Digest: cPYzwABuHX2XOdMbhLUdDVjCGtfjm49AdxAtSkBujWU=
 
 Name: content/background.js
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: bR4989TxOUfkjWXNZZdTGIeRH1U=
-SHA256-Digest: biA8YulWcLmi1e9UxagVUzf8hHrh80OR6npxbzwj78A=
+SHA1-Digest: NXqx+y25S1ryV8prpMUn4KmzBK8=
+SHA256-Digest: gs4798WHjhb+CPaijdH5dNVHTHcwHZSrsWvq7ZBAw70=
 
 Name: content/cm-config.js
 Digest-Algorithms: SHA1 SHA256
@@ -80,15 +80,15 @@ Digest-Algorithms: SHA1 SHA256
 SHA1-Digest: 936TrrGeLYblNuMyh2FSyeKVosI=
 SHA256-Digest: V0gsvAB5pMYXIRM/DA2QEt7FAgMg/rm7Sdn7v/osmSc=
 
-Name: content/default-options.css
-Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: in4eWEsNBWmVc7KwwvoJx+BTM6w=
-SHA256-Digest: 7267AerpU2hGvpG70dWnlCOCkNwAMYH+K56j2zbo+Xs=
-
 Name: content/default.css
 Digest-Algorithms: SHA1 SHA256
 SHA1-Digest: GD0en9Iggx6btJzbuSPuwqc0Z2g=
 SHA256-Digest: Wl/dWYQHCl7uz6i4ydIS9klfw4ZRT7ZRBhhxZKjNseA=
+
+Name: content/default-options.css
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: in4eWEsNBWmVc7KwwvoJx+BTM6w=
+SHA256-Digest: 7267AerpU2hGvpG70dWnlCOCkNwAMYH+K56j2zbo+Xs=
 
 Name: content/iframe-fm.css
 Digest-Algorithms: SHA1 SHA256
@@ -142,8 +142,8 @@ SHA256-Digest: /QttAbJuxBq8My9hupOB9RpNGQmeojQroah1G9d4/IY=
 
 Name: content/about.html
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: tnEZgPD5o56VK8Fw9BcJaDqjkhk=
-SHA256-Digest: S8U+ZdBXTNenJsnEzezC9WryJNaidMPSdM/w+OGd96M=
+SHA1-Digest: fcD5N57uVX7B1ddIFfX97OWoIMM=
+SHA256-Digest: ooON19+6r4ojh+iyI/8amCNRo0vtEDXHzN20vy8GA+c=
 
 Name: content/log.html
 Digest-Algorithms: SHA1 SHA256
