@@ -392,6 +392,16 @@ class ScriptRegister {
 
     // ----- script only
     else if (js) {
+      const {includes, excludes, grant = []} = script;
+
+      // --- Regex include/exclude workaround
+      (includes[0] || excludes[0]) && options.js.push({code: `if (!matchURL()) { throw ''; }`});
+
+      // --- unsafeWindow implementation
+      // Mapping to window object as a temporary workaround for
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=1715249
+      !page && options.js.push({file: '/content/api-plus.js'});
+
       // --- add @require
       require.forEach(item => {
         const id = `_${item}`;
@@ -440,8 +450,6 @@ class ScriptRegister {
         page && (code = `GM.addScript(${JSON.stringify(code)})`);
         options.js.push({code});
       }
-
-      const {includes, excludes, grant = []} = script;
 
       // --- process grant
       const grantKeep = [];
@@ -502,14 +510,6 @@ class ScriptRegister {
         //script.js = `(async() => {await storageGet(); ${script.js}\n})();`;
         script.js = `storageGet().then(() => { ${script.js}\n});`;
       }
-
-      // --- unsafeWindow implementation
-      // Mapping to window object as a temporary workaround for
-      // https://bugzilla.mozilla.org/show_bug.cgi?id=1715249
-      !page && options.js.unshift({file: '/content/api-plus.js'});
-
-      // --- Regex include/exclude workaround
-      (includes[0] || excludes[0]) && options.js.unshift({code: `if (!matchURL()) { throw ''; }`});
 
       // --- add code
       options.js.push({code: Meta.prepare(script.js)});
