@@ -17,6 +17,8 @@ let pref = {
 // ----------------- App -----------------------------------
 class App {
 
+  static firefox = navigator.userAgent.includes('Firefox');
+
   // ----------------- User Preference -----------------------
   static getPref() {
     // update pref with the saved version
@@ -138,7 +140,6 @@ class App {
     return Object.keys(pref).filter(item => item.startsWith('_'));
   }
 }
-App.android = navigator.userAgent.includes('Android');
 // ----------------- /App ----------------------------------
 
 // ----------------- Parse Metadata Block ------------------

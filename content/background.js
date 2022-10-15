@@ -424,17 +424,19 @@ class ScriptRegister {
       // --- add @requireRemote
       if (requireRemote[0]) {
         // css @require injects via api
-        await Promise.all(requireRemote.map(url => !/^(http|\/\/).+(\.css\b|\/css\d*\?)/i.test(url) &&
+        const res = [];                                     // keep order of @require
+        await Promise.all(requireRemote.map((url, index) => !/^(http|\/\/).+(\.css\b|\/css\d*\?)/i.test(url) &&
           fetch(url)
           .then(response => response.text())
           .then(code => {
             url.startsWith('/lib/') && (url = url.slice(1, -1));
             code += sourceURL + encodeURI(url);
             page && (code = `GM.addScript(${JSON.stringify(code)})`);
-            options.js.push({code});
+            res[index] = {code};
           })
           .catch(() => {})
         ));
+        res.forEach(item => options.js.push(item));
       }
 
       // --- add @var

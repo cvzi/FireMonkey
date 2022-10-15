@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 
 Name: manifest.json
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: vTjZLniBWU3O3nNvrvCu7NtLH0c=
-SHA256-Digest: 4ksyZ2uJ2A3ubnLNwBoTU/yqlJij1oANxfeJ3wxOYQw=
+SHA1-Digest: +ta/MDQUN//u2vIjxFBHyZjSyvE=
+SHA256-Digest: bosFO8YhoKrZCiEKdoEhg4BiEyFTj+PxzD2gdPmi4Ro=
 
 Name: _locales/en/messages.json
 Digest-Algorithms: SHA1 SHA256
@@ -42,8 +42,8 @@ SHA256-Digest: z3jfXgJwIBvv2J/Dh3tUlSkDdXY0NKWAbqv7Fw41xCQ=
 
 Name: content/help.html
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: zAK1O024cquAdE4TKp9XbolF0DY=
-SHA256-Digest: Chs9BOfnXssYTiTZpJt7RzEYp2PCn71Er37ev87vwK8=
+SHA1-Digest: pfIe2GMfZkKTNBLQzN1At8vR9e4=
+SHA256-Digest: DxHIc5DVtpqsTsOOwyb/H20mJIqbbeqvn8k9jzG/B3s=
 
 Name: content/install.html
 Digest-Algorithms: SHA1 SHA256
@@ -57,8 +57,8 @@ SHA256-Digest: hZqGsHf0NT1HUxlchYPXJc8fqnVs0U/HhM4YNQbQ4GI=
 
 Name: content/app.js
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: NGJr/jQGZuaYZwExwJAug9kULk8=
-SHA256-Digest: GztTEjp0MqReYuRB3OrGOA8oUof/v0qUMMJ/JysFpxM=
+SHA1-Digest: E0ug4H2dagDs3/YaQ4GPvurW9Bk=
+SHA256-Digest: hfGhmOGY1XyAVs5gBmBfjN6QS0JuomIrvbA+1w+Z5To=
 
 Name: content/background.html
 Digest-Algorithms: SHA1 SHA256
@@ -67,8 +67,8 @@ SHA256-Digest: cPYzwABuHX2XOdMbhLUdDVjCGtfjm49AdxAtSkBujWU=
 
 Name: content/background.js
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: 9kEBZhvSK0WnOz1smO23q6BPXP4=
-SHA256-Digest: ASM9sk78XQjcD/Tyb4ZvduWDYtxToMG9HXVqOHHaiVA=
+SHA1-Digest: Se85swf5TbWtAGJf7VYYV0weh2Y=
+SHA256-Digest: O/RB7mIJKikVHm+zPZRHbCTkN1htL3TlwDPQm/V+UDc=
 
 Name: content/cm-config.js
 Digest-Algorithms: SHA1 SHA256
@@ -142,8 +142,8 @@ SHA256-Digest: /QttAbJuxBq8My9hupOB9RpNGQmeojQroah1G9d4/IY=
 
 Name: content/about.html
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: SFAijHBmgdSBMl6idMVYsf+rw9Y=
-SHA256-Digest: kHIUC0s4nKmvgUw2GuoJGXxrtjbZm87yseA/CkzgCZ8=
+SHA1-Digest: oYtyTZNhQvlcD4sIWHgYLMEZcI4=
+SHA256-Digest: zyrmvaH+EGyjvh7zu6+NUCKbiXJBCE40HfA2gqWNBQU=
 
 Name: content/log.html
 Digest-Algorithms: SHA1 SHA256
@@ -837,11 +837,11 @@ SHA256-Digest: K6PMl7matRcks1azH+qaf43BNAaS9ZYNDLWfdZ0rrMQ=
 
 Name: META-INF/cose.manifest
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: 1BqjlDfEPk7WB/9TVJ0jDnAGrUo=
-SHA256-Digest: h36W+tSRwd72YLfjTR12NWflU7FKBXHvSCKjXmBQl+w=
+SHA1-Digest: QlJ59NVa9iqwEszPVVFl037isBo=
+SHA256-Digest: zqxwtUzwULFoNSNSSzKBwn1HbKptv0FJKs5DnENlDck=
 
 Name: META-INF/cose.sig
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: YBwe4cOIhnmXGyDGJlAW1iW/kno=
-SHA256-Digest: Y+SjT7NCVLc92TnriM0i/jJ8lcPEYeUOluKmYqGqQQw=
+SHA1-Digest: W0Ydw+ltTFDNmNcO1MHCy0qGQB4=
+SHA256-Digest: QC40joNQD9q8ZnjK5ttZcFsQyd1kKpj4IHmygw9ZkcU=
 
