@@ -17,7 +17,7 @@ let pref = {
 // ----------------- App -----------------------------------
 class App {
 
-  static firefox = navigator.userAgent.includes('Firefox');
+  static android = navigator.userAgent.includes('Android');
 
   // ----------------- User Preference -----------------------
   static getPref() {
