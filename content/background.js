@@ -1008,12 +1008,12 @@ class API {
       response:         xhr.response,
       responseHeaders:  xhr.getAllResponseHeaders(),
       // responseText is only available if responseType is '' or 'text'.
-      responseText:     xhr.hasOwnProperty('responseText') ? xhr.responseText : '',
+      responseText:     ['', 'text'].includes(xhr.responseType) ? xhr.responseText : null,
       responseType:     xhr.responseType,
       responseURL:      xhr.responseURL,
       // responseXML is only available if responseType is '' or 'document'.
       // cant pass XMLDocument ➜ Error: An unexpected apiScript error occurred
-      responseXML:      xhr.hasOwnProperty('responseText') ? xhr.responseText : '',
+      responseXML:      ['', 'document'].includes(xhr.responseType) ? xhr.responseText : null,
       status:           xhr.status,
       statusText:       xhr.statusText,
       timeout:          xhr.timeout,
