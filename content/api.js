@@ -29,11 +29,11 @@ browser.userScripts.onBeforeScript.addListener(script => {
     }
 
     // ----- Script Storage
-    async storageGet() {
-      await browser.storage.local.get(id).then((result = {}) => storage = result[id].storage);
+    async setStorage() {
+      await browser.storage.local.get(id).then(result => storage = result[id].storage); // result always an object
     }
 
-    storageChange(changes) {
+    onChanged(changes) {
       if (!changes[id]) { return; }                         // not this userscript
       const oldValue = changes[id].oldValue.storage;
       const newValue = changes[id].newValue.storage;
@@ -127,7 +127,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
     }
 
     // --- prepare request headers
-    async prepareInit(url, init) {
+    prepareInit(init) {
       // --- remove forbidden headers (Attempt to set a forbidden header was denied: Referer), allow specialHeader
       const specialHeader = ['cookie', 'host', 'origin', 'referer'];
       const forbiddenHeader = ['accept-charset', 'accept-encoding', 'access-control-request-headers',
@@ -186,7 +186,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
       return script.export(response);
     },
 
-    setValue(key, value) {
+    async setValue(key, value) {
       storage[key] = value;
       return browser.runtime.sendMessage({
         name,
@@ -195,9 +195,9 @@ browser.userScripts.onBeforeScript.addListener(script => {
       });
     },
 
-    deleteValue(key) {
+    async deleteValue(key) {
       delete storage[key];
-      return browser.runtime.sendMessage({
+       return browser.runtime.sendMessage({
         name,
         api: 'deleteValue',
         data: {key}
@@ -205,7 +205,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
     },
 
     addValueChangeListener(key, callback) {
-      browser.storage.onChanged.hasListener(api.storageChange) || browser.storage.onChanged.addListener(api.storageChange)
+      browser.storage.onChanged.addListener(api.onChanged);
       valueChange[key] = callback;
       return key;
     },
@@ -265,7 +265,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
       // exclude credentials in request, ignore credentials sent back in response (e.g. Set-Cookie header)
       init.anonymous && (data.init.credentials = 'omit');
 
-      await api.prepareInit(url, data.init);
+      api.prepareInit(data.init);
 
       const response = await browser.runtime.sendMessage({
         name,
@@ -296,7 +296,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
       ['method', 'headers', 'data', 'overrideMimeType', 'user', 'password', 'timeout',
         'responseType'].forEach(item => init.hasOwnProperty(item) && (data[item] = init[item]));
 
-      await api.prepareInit(url, data);
+      api.prepareInit(data);
 
       const response = await browser.runtime.sendMessage({
         name,
@@ -596,7 +596,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
     GM_unregisterMenuCommand:     GM.unregisterMenuCommand,
     GM_xmlhttpRequest:            GM.xmlHttpRequest,
 
-    storageGet:                   api.storageGet,
+    setStorage:                   api.setStorage,
     cloneInto:                    api.cloneIntoFM,
     exportFunction,
     matchURL:                     api.matchURL,

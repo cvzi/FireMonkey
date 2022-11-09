@@ -1,5 +1,6 @@
-import {pref, App, Meta, RemoteUpdate, CheckMatches} from './app.js';
-const RU = new RemoteUpdate();
+import {pref, App, Meta} from './app.js';
+import {RemoteUpdate} from './remote-update.js';
+import {Match} from './match.js';
 
 // ----------------- Process Preference --------------------
 class ProcessPref {
@@ -97,19 +98,19 @@ class ProcessPref {
     browser.tabs.query({}).then(tabs => {
       tabs.forEach(async tab => {
         if (tab.discarded)  { return; }
-        if (!CheckMatches.supported(tab.url)) { return; }
+        if (!Match.supported(tab.url)) { return; }
 
         let urls;
         if (allFrames) {
           const frames = await browser.webNavigation.getAllFrames({tabId: tab.id});
-          urls = [...new Set(frames.map(CheckMatches.cleanUrl).filter(CheckMatches.supported))];
+          urls = [...new Set(frames.map(Match.cleanUrl).filter(Match.supported))];
         }
         else {
-          urls = [CheckMatches.cleanUrl(tab.url)];
+          urls = [Match.cleanUrl(tab.url)];
         }
 
         const containerId = tab.cookieStoreId.substring(8);
-        if (!CheckMatches.get(pref[id], tab.url, urls, gExclude, containerId)) { return; }
+        if (!Match.get(pref[id], tab.url, urls, gExclude, containerId)) { return; }
 
         oldCSS && browser.tabs.removeCSS(tab.id, {code: Meta.prepare(oldCSS), allFrames});
         enabled && browser.tabs.insertCSS(tab.id, {code: Meta.prepare(css), allFrames});
@@ -265,7 +266,7 @@ class Counter {
   process(tabId, changeInfo, tab) {
     if (changeInfo.status !== 'complete') { return; }
 
-    CheckMatches.process(tab, true)
+    Match.process(tab, App.getIds(), pref, true)
     .then(count => {
       browser.browserAction.setBadgeText({tabId, text: count[0] ? count.length + '' : ''});
       browser.browserAction.setTitle({tabId, title: count[0] ? count.join('\n') : ''});
@@ -509,8 +510,8 @@ class ScriptRegister {
         script.js = `GM.addScript(${JSON.stringify(str)});`;
       }
       else if (['GM_getValue', 'GM_setValue', 'GM_listValues', 'GM_deleteValue'].some(item => grantKeep.includes(item))) {
-        //script.js = `(async() => {await storageGet(); ${script.js}\n})();`;
-        script.js = `storageGet().then(() => { ${script.js}\n});`;
+        //script.js = `(async() => {await setStorage(); ${script.js}\n})();`;
+        script.js = `setStorage().then(() => { ${script.js}\n});`;
       }
 
       // --- add code
@@ -560,7 +561,7 @@ class Installer {
 
   constructor() {
     // class RemoteUpdate in app.js
-    RU.callback = this.processResponse.bind(this);
+    RemoteUpdate.callback = this.processResponse.bind(this);
 
     // --- Web/Direct Installer
     this.webInstall = this.webInstall.bind(this);
@@ -623,7 +624,7 @@ class Installer {
     })();`;
 
     browser.tabs.executeScript({code})
-    .then((result = []) => result[0] && RU.getScript({updateURL: e.url, name: result[0]}))
+    .then((result = []) => result[0] && RemoteUpdate.getScript({updateURL: e.url, name: result[0]}))
     .catch(error => App.log('webInstall', `${e.url} ➜ ${error.message}`, 'error'));
 
     return {cancel: true};
@@ -750,13 +751,13 @@ class Installer {
     }
 
     // --- do 10 updates at a time & check if script wasn't deleted
-    this.cache.splice(0, 10).forEach(item => pref.hasOwnProperty(item) && RU.getUpdate(pref[item]));
+    this.cache.splice(0, 10).forEach(item => pref.hasOwnProperty(item) && RemoteUpdate.getUpdate(pref[item]));
 
     // --- set autoUpdateLast after updates are finished
     !this.cache[0] && browser.storage.local.set({autoUpdateLast: now}); // update saved pref
   }
 
-  processResponse(text, name, updateURL) {                  // from class RU.callback in app.js
+  processResponse(text, name, updateURL) {                  // from class RemoteUpdate.callback in app.js
 
     const data = Meta.get(text);
     if (!data) {
@@ -780,7 +781,7 @@ class Installer {
 
     // --- check version, if update existing, not for local files
     if (!updateURL.startsWith('file:///') && pref[id] &&
-          !RU.higherVersion(data.version, pref[id].version)) { return; }
+          !RemoteUpdate.higherVersion(data.version, pref[id].version)) { return; }
 
     // --- check for Web Install, set install URL
     if (!data.updateURL && !updateURL.startsWith('file:///')) {
@@ -814,7 +815,7 @@ class API {
   }
 
   onBeforeSendHeaders(e) {
-    if(!e.originUrl || !e.originUrl.startsWith(this.FMUrl)) { return; } // not from FireMonkey
+    if(!e.originUrl?.startsWith(this.FMUrl)) { return; }    // not from FireMonkey
 
     const cookies = [];
     const idx = [];
@@ -855,9 +856,8 @@ class API {
         return App.log(name, e.message, e.type);
 
       case 'install':
-        RU.getScript({updateURL: e.updateURL, name});
+        RemoteUpdate.getScript({updateURL: e.updateURL, name});
         return;
-
 
       // --- from script api
       case 'getValue':

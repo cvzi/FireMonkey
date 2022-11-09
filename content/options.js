@@ -1,8 +1,17 @@
-import {pref, App, Meta, RemoteUpdate} from './app.js';
-const RU = new RemoteUpdate();
+import {pref, App, Meta} from './app.js';
+import {RemoteUpdate} from './remote-update.js';
+import './i18n.js';
 
-// ----------------- Internationalization ------------------
-App.i18n();
+// ----------------- Progress Bar --------------------------
+class ProgressBar {
+
+  static bar = document.querySelector('.progressBar');
+
+  static show() {
+    this.bar.classList.toggle('on');
+    setTimeout(() => this.bar.classList.toggle('on'), 2000);
+  }
+}
 
 // ----------------- Options -------------------------------
 class Options {
@@ -10,7 +19,6 @@ class Options {
   constructor(keys = Object.keys(pref)) {
     this.prefNode = document.querySelectorAll('#' + keys.join(',#')); // defaults to pref keys
     document.querySelector('button[type="submit"]').addEventListener('click', () => this.check()); // submit button
-    this.pBar = document.querySelector('.progressBar');
 
     this.globalScriptExcludeMatches = document.querySelector('#globalScriptExcludeMatches');
   }
@@ -23,12 +31,7 @@ class Options {
       save ? pref[node.id] = node[attr] : node[attr] = pref[node.id];
     });
 
-    save && !this.progressBar() && browser.storage.local.set(pref); // update saved pref
-  }
-
-  progressBar() {
-    this.pBar.classList.toggle('on');
-    setTimeout(() => this.pBar.classList.toggle('on'), 2000);
+    save && !ProgressBar.show() && browser.storage.local.set(pref); // update saved pref
   }
 
   check() {
@@ -64,9 +67,9 @@ class Script {
 
   constructor() {
     // class RemoteUpdate in app.js
-    RU.callback = this.processResponse.bind(this);
+    RemoteUpdate.callback = this.processResponse.bind(this);
 
-    this.docfrag = document.createDocumentFragment();
+    this.docFrag = document.createDocumentFragment();
     this.liTemplate = document.createElement('li');
     this.navUL = document.querySelector('aside ul');
     this.legend = document.querySelector('.script legend');
@@ -659,7 +662,7 @@ class Script {
     this.navUL.textContent = '';                            // clear data
 
     App.getIds().sort(Intl.Collator().compare).forEach(item => this.addScript(pref[item]));
-    this.navUL.appendChild(this.docfrag);
+    this.navUL.appendChild(this.docFrag);
 
     if (this.box.id) {                                      // refresh previously loaded content
       this.box.textContent = '';
@@ -674,7 +677,7 @@ class Script {
     item.error && li.classList.add('error');
     li.textContent = item.name;
     li.id = `_${item.name}`;
-    this.docfrag.appendChild(li);
+    this.docFrag.appendChild(li);
     li.addEventListener('click', e => this.showScript(e));
   }
 
@@ -856,9 +859,9 @@ class Script {
               value.value[Object.keys(value.value).find(item => item.endsWith('*')) || Object.keys(value.value)[0]];
           break;
       }
-      this.docfrag.appendChild(li);
+      this.docFrag.appendChild(li);
     });
-    this.userVar.appendChild(this.docfrag);
+    this.userVar.appendChild(this.docFrag);
   }
 
   resetUserVar() {
@@ -1016,7 +1019,7 @@ class Script {
     if (!box.id) {                                          // new script
       this.addScript(data);
       const index = [...this.navUL.children].findIndex(item => Intl.Collator().compare(item.id, id) > 0);
-      index !== -1 ? this.navUL.insertBefore(this.docfrag, this.navUL.children[index]) : this.navUL.appendChild(this.docfrag);
+      index !== -1 ? this.navUL.insertBefore(this.docFrag, this.navUL.children[index]) : this.navUL.appendChild(this.docFrag);
       this.navUL.children[index !== -1 ? index : 0].classList.toggle('on', true);
     }
     else {                                                  // existing script
@@ -1052,13 +1055,18 @@ class Script {
     }
 
     // --- check storage JS only
-    if (data.js && this.storage.value.trim()) {
-      const storage = App.JSONparse(this.storage.value);
-      if (!storage) {
-        App.notify(browser.i18n.getMessage('storageError')) ;
-        return;
+    if (data.js) {
+      if (!this.storage.value.trim()) {
+        data.storage = {};                                  // clear storage
       }
-      data.storage = storage;
+      else {
+        const storage = App.JSONparse(this.storage.value);
+        if (!storage) {
+          App.notify(browser.i18n.getMessage('storageError')) ;
+          return;
+        }
+        data.storage = storage;
+      }
     }
 
     // --- update box & legend
@@ -1072,7 +1080,7 @@ class Script {
     this.showUserVar(id);
 
     // --- progress bar
-    options.progressBar();
+    ProgressBar.show();
   }
 
   // --- Remote Update
@@ -1087,10 +1095,10 @@ class Script {
       return;
     }
 
-    RU.getUpdate(pref[id], true);                           // to class RemoteUpdate in common.js
+    RemoteUpdate.getUpdate(pref[id], true);                 // to class RemoteUpdate in app.js
   }
 
-  processResponse(text, name, updateURL) {                  // from class RemoteUpdate in common.js
+  processResponse(text, name, updateURL) {                  // from class RemoteUpdate in app.js
     const data = Meta.get(text);
     if (!data) { throw `${name}: Update Meta Data error`; }
 
@@ -1098,7 +1106,7 @@ class Script {
     const oldId = `_${name}`;
 
     // --- check version
-    if (!RU.higherVersion(data.version, pref[id].version)) {
+    if (!RemoteUpdate.higherVersion(data.version, pref[id].version)) {
       App.notify(browser.i18n.getMessage('noNewUpdate'), name);
       return;
     }
