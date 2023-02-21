@@ -569,11 +569,11 @@ class Installer {
 
     browser.webRequest.onBeforeRequest.addListener(this.webInstall, {
         urls: [
-        'https://greasyfork.org/scripts/*.user.js',
-        'https://greasyfork.org/scripts/*.user.css',
-        'https://sleazyfork.org/scripts/*.user.js',
-        'https://sleazyfork.org/scripts/*.user.css',
-        'https://openuserjs.org/install/*.user.js',
+          'https://greasyfork.org/scripts/*.user.js',
+          'https://greasyfork.org/scripts/*.user.css',
+          'https://sleazyfork.org/scripts/*.user.js',
+          'https://sleazyfork.org/scripts/*.user.css',
+          'https://openuserjs.org/install/*.user.js',
         ],
         types: ['main_frame']
       },
