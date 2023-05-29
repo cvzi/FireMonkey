@@ -77,10 +77,10 @@ class LocaleMaker {
     const docfrag = document.createDocumentFragment();
 
     Object.keys(data).forEach(item => {
-      if (item === 'extensionName') { 
+      if (item === 'extensionName') {
         document.title += ' - ' + data[item].message;
         return;                                             // keep extension name
-      }             
+      }
       const tr = this.trTemplate.cloneNode(true);
       tr.children[0].textContent = this.showSpecial(data[item].message);
       tr.children[1].children[0].id = item;
@@ -100,7 +100,7 @@ class LocaleMaker {
         const idx = [...document.querySelectorAll('td input')].indexOf(document.activeElement);
         this.inputs.forEach((item, index) => index >= idx && lines[0] && (item.value = lines.shift().trim()));
       }
-  });
+    });
   }
 
   setLocale(data) {

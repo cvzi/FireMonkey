@@ -1,5 +1,6 @@
 @import 'default.css';
 @import 'default-options.css';
+@import 'cm.css';
 
 /* ----- Mobile ----- */
 @media screen and (max-width: 600px) {
@@ -10,32 +11,26 @@
 
 /* ----- Aside Scripts ----- */
 :root {
-  --nav-menu-width: 13.5rem;
+  --aside: 13.5rem;
 }
 
 article {
-  transition: padding 0.5s;
+  transition: padding 0.5s ease-in-out;
 }
 
 #sidebar:checked ~ article {
-  padding-left: calc(var(--nav-menu-width) + 1em);
+  padding-left: calc(var(--aside) + 1em);
 }
 
 #sidebar:checked ~ aside {
-  animation: slide 0.5s ease-in-out;
-  display: flex;
-}
-
-@keyframes slide {
-    0%  { transform: translateX(-15em); }
-  100%  { transform: translateX(0); }
+  transform: translateX(0);
 }
 
 aside {
   margin: 0;
   padding: 0;
   font-size: 0.9em;
-  width: var(--nav-menu-width);
+  width: var(--aside);
   height: calc(100vh - var(--nav-height));
   position: absolute;
   top: var(--nav-height);
@@ -43,12 +38,16 @@ aside {
   z-index: 10;
   background: var(--bg);
   border-right: 1px solid var(--border);
-  transition: 0.5s;
-  flex-direction: column;
-  display: none;
+  transition: 0.5s ease-in-out;
+  transform: translateX(calc(var(--aside) * -1));
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-rows: auto 1fr auto auto;
 }
 
 .list {
+  display: grid;
+  grid-auto-flow: column;
   padding: 0.3em 0.5em;
   background: var(--hover);
   text-align: center;
@@ -61,8 +60,7 @@ aside {
 }
 
 .list label img {
-  width: 1.1em;
-  vertical-align: middle;
+  width: 1.5em;
 }
 
 .list label:nth-of-type(2) img {
@@ -89,8 +87,6 @@ aside ul {
   padding: 0;
   overflow-x: hidden;
   overflow-y: auto;
-  height: 30vh;
-  flex-grow: 1;
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
 }
@@ -116,11 +112,11 @@ aside li:hover {
 
 aside li.on {
   background-color: var(--selected-bg);
-  border-color: #f84;
+  border-color: var(--highlight);
 }
 
 aside li.error::after {
-  content: '\2718';
+  content: '✘';
   font-weight: 900;
   display: inline-block;
   vertical-align: text-bottom;
@@ -157,6 +153,12 @@ aside div:last-of-type {
   padding: 0.5em;
 }
 
+aside div.button {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 0.5em;
+}
+
 aside div label.flat,
 aside div button.flat {
   padding: 0.3em;
@@ -186,10 +188,20 @@ aside ul + div::after {
 /* ----- /Counter ----- */
 
 /* ----- Options ----- */
-.options fieldset label {
-  display: inline-block;
-  min-width: 25vw;
-  margin-right: 1em;
+.options fieldset {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  column-gap: 0.5em;
+}
+
+.options p,
+.options textarea,
+.options details {
+  grid-column: span 2;
+}
+
+.options fieldset label img {
+  vertical-align: unset;
 }
 
 .options textarea {
@@ -225,17 +237,30 @@ option {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.options div.button {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  column-gap: 0.5em;
+}
 /* ----- /Options ----- */
 
 /* ----- Scripts ----- */
+/* override default-options.css */
+#nav4:checked ~ article section:nth-of-type(4) {
+  display: grid;
+}
+
 section.script {
   padding: 0 0.5em;
+  /* menu + editor + footer */
+  grid-template-rows: auto 1fr auto;
 }
 
 .menu {
-  display: flex;
-  height: 2em;
   border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: repeat(7, auto) 1fr repeat(6, auto);
 }
 
 .menu span.plus,
@@ -300,11 +325,9 @@ button.bin img {
   transition: 0.5s;
   height: 2em;
   width: 2em;
-  display: flex;
-  flex-direction: column;
+  display: grid;
   justify-content: center;
   align-content: center;
-  text-align: center;
 }
 
 .menu summary img {
@@ -322,8 +345,8 @@ button.bin img {
 }
 
 @keyframes fade-in {
-    0%  { opacity: 0; transform: translateY(-1em); }
-  100%  { opacity: 1; transform: translateY(0); }
+    0% { opacity: 0; transform: translateY(-1em); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 .menu details > div {
@@ -390,17 +413,17 @@ button.bin img {
   color: #fff;
   background: #777;
   border-radius: 5px 5px 0 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 .menu details li select {
   color: inherit;
-  /*width: 100%;*/
   border: 1px solid #ccc;
 }
 
 .menu details li.theme select {
   background: inherit;
-  width: 50%;
 }
 
 .menu details li:last-of-type {
@@ -417,6 +440,7 @@ button.bin img {
   height: 20vh;
 }
 
+/* --- menu report/userVar --- */
 .menu div.report,
 .menu div.userVar {
   width: 40vw;
@@ -440,7 +464,6 @@ button.bin img {
 }
 
 .menu div.report li {
-  display: flex;
   padding: 0 0.5em;
   white-space: normal;
   border-bottom: 1px solid var(--border);
@@ -453,29 +476,25 @@ button.bin img {
 
 .menu div.report li::before {
   content: attr(data-line);
-  flex: 0 0 3em;
+  width: 3em;
   text-align: right;
   margin: 0 0.5em auto 0.8em;
   color: var(--fieldset-color);
 }
 
 .menu div.userVar li {
-  display: flex;
   padding: 0.5em;
   white-space: normal;
   border-bottom: 1px solid var(--border);
   background-color: var(--option-bg);
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  justify-items: self-start;
 }
 
-.menu div.userVar li > * {
-  flex: 1;
-}
-
-.menu div.userVar li input[type="checkbox"],
-.menu div.userVar li input[type="color"],
-.menu div.userVar li input[type="range"],
-.menu div.userVar li output {
-  flex: 0 auto;
+.menu div.userVar li input[type="text"],
+.menu div.userVar li select {
+  grid-column: span 2;
 }
 
 .menu div.userVar li input[type="color"] {
@@ -493,15 +512,16 @@ button.bin img {
 .menu div.userVar button {
   border: 0;
   padding: 0.8em;
+  width: 100%;
 }
-
+/* --- menu report/userVar --- */
 
 .script fieldset {
   border: 0;
   margin: 0;
   padding: 0 0 0.5em;
-  height: calc(100% - 3rem);
   background: unset;
+  font-size: 1.1em;
 }
 
 .script legend {
@@ -534,7 +554,7 @@ legend.disabled::before {
 }
 
 legend.antifeature::after {
-  content: '\26a0\fe0f';
+  content: '⚠️';
   margin-left: 2em;
 }
 
@@ -549,10 +569,10 @@ legend span {
 }
 
 footer {
-  color: #999;
-  font-size: 0.8rem;
+  color: #555;
+  font-size: 0.8em;
   text-align: right;
-  height: 1rem;
+  padding-bottom: 0.3em;
 }
 /* ----- /Scripts ----- */
 
@@ -575,12 +595,12 @@ footer {
 }
 
 .log tr.info td:nth-of-type(3)::before {
-  content: '\26a0\fe0f';
+  content: '⚠️';
   margin-right: 0.5em;
 }
 
 .log tr.error td:nth-of-type(3)::before {
-  content: '\2757';
+  content: '❗';
   margin-right: 0.5em;
 }
 

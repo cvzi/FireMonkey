@@ -1,0 +1,95 @@
+@import 'default.css';
+
+/* ----- Dark Theme ----- */
+:root,
+body.dark {
+  --border: #444;
+  --h1: #0cf;
+  --dt: #abc;
+}
+
+/* ----- Light Theme ----- */
+@media screen and (prefers-color-scheme: light) {
+  :root {
+    --border: #ddd;
+    --h1: #066;
+    --dt: #345;
+  }
+}
+
+/* ----- General ----- */
+html {
+  scroll-padding-top: 2.5em;
+}
+
+body {
+  font-size: 0.9em;
+}
+
+img {
+  vertical-align: text-bottom;
+}
+
+a[href^="https://github.com/"]::before {
+  content: '';
+  background: url('../image/github.svg') no-repeat center / contain;
+  display: inline-block;
+  height: 1.1em;
+  width: 1.1em;
+  margin-right: 0.3em;
+  vertical-align: text-bottom;
+  filter: var(--img-filter);
+}
+
+article {
+  padding: 0.5em;
+}
+
+h1 {
+  color: var(--h1);
+  font-family: serif;
+  font-size: 2em;
+  padding-top: 1em;
+}
+
+dt {
+  color: var(--dt);
+  font-weight: bold;
+  display: table;
+  padding: 0.2em 0.5em;
+  margin-bottom: 0.2em;
+  font-size: 1.1em;
+  border-bottom: 1px solid var(--border);
+  min-width: 15vw;
+}
+
+dd + dt {
+  margin-top: 0.5em;
+}
+
+/* ----- Navigation ----- */
+nav {
+  background-color: var(--nav);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  box-shadow: 0px 3px 6px var(--shadow);
+}
+
+nav > a {
+  color: var(--h1);
+  display: inline-block;
+  padding: 0.3em 0.5em;
+  text-align: center;
+  min-width: 5em;
+  position: relative;
+  display: inline-block;
+  border-top: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  transition: all 0.5s ease-in-out;
+}
+
+nav > a:hover {
+  border-top-color: var(--highlight);
+}
+/* ----- /Navigation ----- */

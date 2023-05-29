@@ -1,29 +1,38 @@
-'use strict';
-
+// ---------- CodeMirror Extra Config (Side Effect) --------
 class Config {
 
-  constructor() {
+  static {
     this.lint = this.lint.bind(this);
 
     // add custom meta lint in fm-lint.js 184-185
     CodeMirror.registerHelper('firemonkey', 'lint', this.lint);
 
-    // add to window global for lint & hint fm-javascript.js 132-134
+    // add to window global for lint & hint fm-javascript.js
     window.GM = {
-      addElement: {}, addScript: {}, addStyle: {}, addValueChangeListener: {}, deleteValue: {}, download: {}, fetch: {},
-      getResourceText: {}, getResourceURL: {}, getResourceUrl: {}, getValue: {}, info: {}, listValues: {}, log: {},
-      notification: {}, openInTab: {}, popup: {}, registerMenuCommand: {}, removeValueChangeListener: {},
-      setClipboard: {}, setValue: {}, unregisterMenuCommand: {}, xmlhttpRequest: {}
+      getValue: {}, setValue: {}, deleteValue: {}, listValues: {},
+      getValues: {}, setValues: {}, deleteValues: {},
+      addValueChangeListener: {}, removeValueChangeListener: {},
+
+      addElement: {}, addScript: {}, addStyle: {},   download: {},
+      getResourceText: {}, getResourceURL: {}, getResourceUrl: {}, info: {}, log: {},
+      notification: {}, openInTab: {}, popup: {},
+      registerMenuCommand: {}, unregisterMenuCommand: {}, setClipboard: {},
+      fetch: {}, xmlHttpRequest: {}
     };
 
     const gm = [
-      'GM_addElement', 'GM_addScript', 'GM_addStyle', 'GM_addValueChangeListener', 'GM_deleteValue', 'GM_download',
-      'GM_fetch', 'GM_getResourceText', 'GM_getResourceURL', 'GM_getValue', 'GM_info',
-      'GM_listValues', 'GM_log', 'GM_notification', 'GM_openInTab', 'GM_popup',
-      'GM_registerMenuCommand', 'GM_removeValueChangeListener', 'GM_setClipboard',
-      'GM_setValue', 'GM_unregisterMenuCommand', 'GM_xmlhttpRequest', 'unsafeWindow'
+      'GM_getValue', 'GM_setValue', 'GM_deleteValue', 'GM_listValues',
+      'GM_getValues', 'GM_setValues', 'GM_deleteValues',
+      'GM_addValueChangeListener', 'GM_removeValueChangeListener',
+
+      'GM_addElement', 'GM_addScript', 'GM_addStyle', 'GM_download',
+      'GM_getResourceText', 'GM_getResourceURL', 'GM_info',
+      'GM_log', 'GM_notification', 'GM_openInTab', 'GM_popup',
+      'GM_registerMenuCommand', 'GM_unregisterMenuCommand', 'GM_setClipboard',
+      'GM_fetch', 'GM_xmlhttpRequest', 'unsafeWindow',
+      'exportFunction', 'cloneInto'
     ];
-    gm.forEach(item => window[item] = {});
+    gm.forEach(i => window[i] = {});
 
     this.reportUL = document.querySelector('div.report ul');
     this.reportDefault = this.reportUL.firstElementChild.cloneNode(true);
@@ -40,7 +49,7 @@ class Config {
     });
   }
 
-  lint(cm, annotationsNotSorted) {
+  static lint(cm, annotationsNotSorted) {
     const text = cm.getValue();
     const js = cm.options.mode === 'javascript';
     const meta = text.match(/^([\s\S]+)==(UserScript|UserCSS|UserStyle)==([\s\S]+)==\/\2==/i) || ['','','',''];
@@ -50,7 +59,6 @@ class Config {
     // ------------- Lint Filter ---------------------------
     const idx =[];                                          // delete index cache
     annotationsNotSorted.forEach((item, index) => {
-      const m = item.message.match(/'(GM_getValue|GM_listValues|GM_getTabs?|GM_saveTab|exportFunction|cloneInto)' is not defined/);
       const {line, ch} = item.from;
 
       switch (true) {
@@ -71,24 +79,16 @@ class Config {
           idx.push(index);
           break;
 
-        // suppress not defined
-        case m && ['GM_getValue', 'GM_listValues'].includes(m[1]):
-         // item.message = m[1] + ' is partially supported. Read the Help for more information.';
-          idx.push(index);
-          break;
-
-        case m && ['GM_getTab', 'GM_getTabs', 'GM_saveTab'].includes(m[1]):
-          item.message = m[1] + ' is not supported.';
+        // change 'not defined' to 'not supported'
+        case js && /'(GM_getTabs?|GM_saveTab)' is not defined/.test(item.message):
+          item.message = item.message.replace('defined', 'supported');
           item.severity = 'error';
           break;
 
-        case item.message === '`var` declarations are forbidden. Use `let` or `const` instead.':
-          item.message = 'Since ECMAScript 6 (2015), it is recommended to use `let` & `const` instead of `var`.';
+        // custom 'var' message
+        case js && item.message === '`var` declarations are forbidden. Use `let` or `const` instead.':
+          item.message = 'Since ECMAScript 6 (2015), `let` & `const` are recommended over `var`.'
           item.severity = 'info';
-          break;
-
-        case m && ['exportFunction', 'cloneInto'].includes(m[1]):
-          idx.push(index);
           break;
       }
     });
@@ -99,23 +99,23 @@ class Config {
     if (!meta[3]) { return; }
 
     const supported = ['@name', '@author', '@description', '@version', '@updateURL', '@match',
-          '@matches', '@include', '@exclude', '@exclude-match', '@excludeMatches', '@includeGlobs',
-          '@excludeGlobs', '@matchAboutBlank', '@allFrames', '@noframes', '@require', '@resource',
-          '@run-at', '@runAt', '@downloadURL', '@inject-into', '@compatible', '@container',
-          '@homepage', '@homepageURL', '@website', '@source', '@grant', '@support', '@supportURL',
-          '@var', '@advanced', '@preprocessor'];
+      '@matches', '@include', '@exclude', '@exclude-match', '@excludeMatches', '@includeGlobs',
+      '@excludeGlobs', '@matchAboutBlank', '@allFrames', '@noframes', '@require', '@resource',
+      '@run-at', '@runAt', '@downloadURL', '@inject-into', '@compatible', '@container',
+      '@homepage', '@homepageURL', '@website', '@source', '@grant', '@support', '@supportURL',
+      '@var', '@advanced', '@preprocessor', '@license'];
 
     const unsupported = ['@namespace', '@icon', '@connect', '@unwrap', '@nocompat'];
 
     const sticky = null;
 
-    meta[3].split(/\r?\n/).forEach((item, index) =>  {      // lines
+    meta[3].split(/\r?\n/).forEach((item, index) => {       // lines
       let [,com, prop, value] = item.match(/^\s*(\/\/)?\s*(\S+)(?:\s*)(.*)/) || [];
       if (!prop) { return; }                                // continue to next
 
       value = value.trim();
       let message;
-      let severity = 'warning';
+      let severity = 'info';
       const line = b4 + index -1;
       let ch = item.indexOf(prop);
       const propLC = prop.toLowerCase();
@@ -129,21 +129,15 @@ class Config {
 
         case !prop.startsWith('@'):
           message = com ? 'It is recommended to put comments outside the Metadata Block.' : `${prop} is not supported.`;
-          severity = 'info';
           break;
 
         case prop === '@antifeature':
-          message = 'Includes unexpected content e.g. ads, mineres etc.';
-          severity = 'error';
+          message = 'Includes unexpected content e.g. ads, miners etc.';
+          severity = 'warning';
           break;
-/*
-        case prop === '@resource':
-          message = `${prop} is implemented differently in FireMonkey. Read the Help for more information.`;
-          break;
-*/
+
         case unsupported.includes(prop):
           message = `${prop} is not processed.`;
-          severity = 'info';
           break;
 
         case supported.includes(propLC):
@@ -154,10 +148,9 @@ class Config {
 
         case prop.startsWith('@'):
           message = `${prop} is not processed.`;
-          severity = 'info';
           break;
 
-        default:                                            // unsuported
+        default:                                            // unsupported
           message = `${prop} is not supported.`;
           severity = 'error';
       }
@@ -173,7 +166,7 @@ class Config {
       message = '';
       severity = 'warning';
       switch (true) {
-        case prop === '@resource' && !/\.css\b/i.test(value):
+        case prop === '@resource' && /\.(jpe?g|png|gif|webp|svg)\b/i.test(value): // image @resource
           message = `${value} is not supported for GM_getResourceText.`;
           break;
 
@@ -181,14 +174,12 @@ class Config {
           break;
 
         // all js & grant
-        case value === 'GM_getResourceText':
-        case value === 'GM_getResourceUrl':
+        case value === 'GM_getResourceURL':
           message = `${value} is implemented differently in FireMonkey. Please read the Help for more information.`;
           break;
 
         case /^(GM(\.|_)(getTabs?|saveTab)$)/.test(value):
-        case value.startsWith('window.'): // window.close | window.focus | window.onurlchange
-        case value === 'GM_getResourceURL':
+        case value.startsWith('window.'):                   // window.close | window.focus | window.onurlchange
           message = `${value} is not supported.`;
           break;
       }
@@ -207,13 +198,12 @@ class Config {
     const lines = text.split(/\r?\n/);
     const regex = js ? /(GM\.getTabs?|GM\.saveTab)(?=\s*\()/ : /@-moz-document\s+regexp\s*\(('|")(.+?)\1\)/;
     lines.forEach((item, index) => {
-
       const m = item.match(regex);
       m && annotationsNotSorted.push({
         message: js ? `${m[1]} is not supported.` : 'Regular Expression is not supported.',
         severity: 'error',
         from: {line: index, ch: m.index, sticky},
-        to:   {line: index, ch: m.index + m[0].length, sticky}
+        to: {line: index, ch: m.index + m[0].length, sticky}
       });
     });
     // ------------- /regexp check -------------------------
@@ -221,9 +211,9 @@ class Config {
     this.report(cm, annotationsNotSorted);
   }
 
-  report(cm, lint) {
+  static report(cm, lint) {
     const nf = new Intl.NumberFormat();
-    const docfrag = document.createDocumentFragment();
+    const docFrag = document.createDocumentFragment();
     this.reportUL.textContent = '';
     const liTemp = this.reportDefault.cloneNode();
 
@@ -239,10 +229,9 @@ class Config {
       li.dataset.line = nf.format(item.from.line +1);
       li.textContent = item.message;
       li.addEventListener('click', () => cm.setCursor(item.from.line, item.from.ch));
-      docfrag.appendChild(li);
+      docFrag.appendChild(li);
     });
 
-    this.reportUL.appendChild(docfrag);
+    this.reportUL.appendChild(docFrag);
   }
 }
-new Config();

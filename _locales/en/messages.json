@@ -88,6 +88,9 @@
   "customPopupCSSDescription": { "message": "Customize toolbar popup style configuration" },
   "cmOptionsDescription": { "message": "Customize CodeMirror, addons & JavaScript lint configuration" },
 
+  "importFromUrl": { "message": "Import from URL" },
+  "importFromUrlMessage": { "message": "Enter URL to import from" },
+
 
   "about": { "message": "About" },
   "error": { "message": "There was an error with the operation" },

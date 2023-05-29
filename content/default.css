@@ -1,5 +1,6 @@
 /* ----- Dark Theme ----- */
-:root, body.dark {
+:root,
+body.dark {
   --color: #fff;
   --bg: #000;
   --hover: #888;
@@ -7,6 +8,15 @@
   --border: #777;
   --option-bg: #444;
   --link: #0ef;
+  --dim: #ccc;
+
+  --highlight: #f84;
+
+  /* --- about/help --- */
+  --nav: #444;
+  --shadow: #fff8;
+  --img-filter: invert(1) grayscale(1);
+  --code: #555;
 }
 
 /* ----- Light Theme ----- */
@@ -19,6 +29,13 @@
     --border: #ddd;
     --option-bg: #f5f5f5;
     --link: #08f;
+    --dim: #777;
+
+    /* --- about/help --- */
+    --nav: #fff;
+    --shadow: #0004;
+    --img-filter: none;
+    --code: #f1f1f1;
   }
 }
 
@@ -60,6 +77,13 @@ a {
   text-decoration: none;
 }
 
+code {
+  font-size: 1.2em;
+  padding: 0 0.3em;
+  background-color: var(--code);
+  white-space: break-spaces;
+}
+
 button {
   background: var(--btn-bg);
   color: inherit;
@@ -85,18 +109,16 @@ button > * {
   font-style: italic;
 }
 
-.flex, .flex-display {
-  display: flex;
-}
-
-.flex > * {
-  flex: 1;
-}
-
-.spacer {
-  flex-grow: 1;
+.grid {
+  display: grid;
 }
 
 .invalid, input:invalid {
   box-shadow: 1px 1px 4px #f20, -1px -1px 4px #f20;
+}
+
+/* ----- Navigation ----- */
+input[name="nav"],
+input[type="checkbox"].control {
+  display: none;
 }

@@ -1,5 +1,6 @@
 /* ----- Dark Theme ----- */
-:root, body.dark {
+:root,
+body.dark {
   --trailingspace-bg: #234;
   --trailingspace-border: #555;
   --gm: gold;
@@ -32,11 +33,14 @@
   bottom: 0.5em;
 }
 
-.CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {
-  background-color: inherit; /* The little square between H and V scrollbars */
+.CodeMirror-scrollbar-filler,
+.CodeMirror-gutter-filler {
+  background-color: inherit;
+  /* The little square between H and V scrollbars */
 }
 
-.cm-tab, .cm-trailingspace {
+.cm-tab,
+.cm-trailingspace {
   background: var(--trailingspace-bg);
   border-bottom: 1px solid var(--trailingspace-border);
   border-radius: 5px;
@@ -62,12 +66,12 @@ div.CodeMirror-code > div:hover .CodeMirror-linenumber {
   font-weight: bold;
 }
 
-
 /* ----- CSS Colors ----- */
-span.cm-fm-color{
+span.cm-fm-color {
   position: relative;
   margin-left: 1.5em;
 }
+
 span.cm-fm-color::before {
   content: '';
   width: 0.9em;
@@ -80,7 +84,8 @@ span.cm-fm-color::before {
   border-radius: 5em;
   position: absolute;
   top: 0;
-  left: -1.4em;;
+  left: -1.4em;
+  ;
 }
 
 /* ----- Lint ----- */
@@ -88,12 +93,14 @@ span.cm-fm-color::before {
   border-bottom: 2px dotted #7cf;
 }
 
-.CodeMirror-lint-marker-info, .CodeMirror-lint-message-info {
+.CodeMirror-lint-marker-info,
+.CodeMirror-lint-message-info {
   padding-left: 0.2em;
 }
 
-.CodeMirror-lint-marker-info, .CodeMirror-lint-message-info::before {
-  content: '\2139\fe0f';
+.CodeMirror-lint-marker-info,
+.CodeMirror-lint-message-info::before {
+  content: 'ℹ️';
   margin-left: 0;
   margin-right: 0.2em;
 }

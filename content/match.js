@@ -1,6 +1,10 @@
+import {App} from './app.js';
+
+// ---------- Match Pattern Check --------------------------
 export class Match {                                        // bg & popup
 
-  static async process(tab, ids, pref, bg) {
+  static async process(tab, pref, bg) {
+    const ids = App.getIds(pref);
     const supported = this.supported(tab.url);
     if (bg && !supported) { return []; }                    // Unsupported scheme
 
@@ -15,14 +19,14 @@ export class Match {                                        // bg & popup
 
     // --- background
     if (bg) {
-      return ids.filter(item => pref[item].enabled && this.get(pref[item], tab.url, urls, gExclude, containerId))
-          .map(item => (pref[item].js ? '🔹 ' :  '🔸 ') + item.substring(1));
+      return ids.filter(id => pref[id].enabled && this.get(pref[id], tab.url, urls, gExclude, containerId))
+        .map(id => (pref[id].js ? '🔹 ' : '🔸 ') + id.substring(1));
     }
 
     // --- popup
     const Tab = [], Other = [];
     ids.sort(Intl.Collator().compare).forEach(item =>
-        (this.get(pref[item], tab.url, urls, gExclude, containerId) ? Tab : Other).push(item));
+      (this.get(pref[item], tab.url, urls, gExclude, containerId) ? Tab : Other).push(item));
     return [Tab, Other, frames.length];
   }
 
@@ -44,17 +48,17 @@ export class Match {                                        // bg & popup
       case urls.includes('about:blank') && item.matchAboutBlank: // about:blank
         return true;
 
-      case gExclude[0] && this.isMatch(urls, gExclude):     // Global Script Exclude Matches
+      case gExclude[0] && this.#isMatch(urls, gExclude):     // Global Script Exclude Matches
       case !item.matches[0] && !item.includes[0] && !item.includeGlobs[0] && !styleMatches[0]: // scripts/css without matches/includes/includeGlobs/style
 
       // includes & matches & globs
-      case !item.includes[0] && !this.isMatch(urls, [...item.matches, ...styleMatches]):
-      case item.includeGlobs[0] && !this.isMatch(urls, item.includeGlobs, true):
-      case item.includes[0] && !this.isMatch(urls, item.includes, false, true):
+      case !item.includes[0] && !this.#isMatch(urls, [...item.matches, ...styleMatches]):
+      case item.includeGlobs[0] && !this.#isMatch(urls, item.includeGlobs, true):
+      case item.includes[0] && !this.#isMatch(urls, item.includes, false, true):
 
-      case item.excludeMatches[0] && this.isMatch(urls, item.excludeMatches):
-      case item.excludeGlobs[0] && this.isMatch(urls, item.excludeGlobs, true):
-      case item.excludes[0] && this.isMatch(urls, item.excludes, false, true):
+      case item.excludeMatches[0] && this.#isMatch(urls, item.excludeMatches):
+      case item.excludeGlobs[0] && this.#isMatch(urls, item.excludeGlobs, true):
+      case item.excludes[0] && this.#isMatch(urls, item.excludes, false, true):
         return false;
 
       default:
@@ -62,13 +66,13 @@ export class Match {                                        // bg & popup
     }
   }
 
-  static isMatch(urls, arr, glob, regex) {
+  static #isMatch(urls, arr, glob, regex) {
     switch (true) {
       case regex:
-        return urls.some(u => new RegExp(this.prepareRegEx(arr), 'i').test(u));
+        return urls.some(u => new RegExp(this.#prepareRegEx(arr), 'i').test(u));
 
       case glob:
-        return urls.some(u => new RegExp(this.prepareGlob(arr), 'i').test(u));
+        return urls.some(u => new RegExp(this.#prepareGlob(arr), 'i').test(u));
 
       // catch all checks
       case arr.includes('<all_urls>'):
@@ -77,11 +81,11 @@ export class Match {                                        // bg & popup
         return true;
 
       default:
-        return urls.some(u => new RegExp(this.prepareMatch(arr), 'i').test(u));
+        return urls.some(u => new RegExp(this.#prepareMatch(arr), 'i').test(u));
     }
   }
 
-  static prepareMatch(arr) {
+  static #prepareMatch(arr) {
     const regexSpChar = /[-\/\\^$+?.()|[\]{}]/g;            // Regular Expression Special Characters
     return arr.map(item => '(^' +
         item.replace(regexSpChar, '\\$&')
@@ -92,7 +96,7 @@ export class Match {                                        // bg & popup
             .join('|');
   }
 
-  static prepareGlob(arr) {
+  static #prepareGlob(arr) {
     const regexSpChar = /[-\/\\^$+.()|[\]{}]/g;             // Regular Expression Special Characters minus * ?
     return arr.map(item => '(^' +
         item.replace(regexSpChar, '\\$&')
@@ -103,7 +107,7 @@ export class Match {                                        // bg & popup
             .join('|');
   }
 
-  static prepareRegEx(arr) {
+  static #prepareRegEx(arr) {
     return arr.map(item => `(${item.slice(1, -1)})`).join('|');
   }
 }
