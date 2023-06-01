@@ -18,6 +18,11 @@
     <h1 id="changelog">Changelog</h1>
     <dl>
 
+      <dt>2.69</dt>
+      <dd>Added multi storage API options to <code>GM getValue, GM setValue, GM deleteValue</code> (#545)</dd>
+      <dd>Fixed an issue with processing sync storage (from 2.68)</dd>
+      <dd>Removed multi storage APIs <code>GM getValues, GM setValues, GM deleteValues</code> (#545) (from 2.68)</dd>
+
       <dt>2.68</dt>
       <dd>Added <code>@include   http*</code> conversion (#429#issuecomment-1474408605)</dd>
       <dd>Added <code>@licence</code> to popup Info page (#524)</dd>
@@ -27,11 +32,11 @@
       <dd>Added <code>about:blank</code> processing in <code>@include</code></dd>
       <dd>Added <code>GM createObjectURL</code> API (#558)</dd>
       <dd>Added <code>GM import</code> API (#558)</dd>
-      <dd>Added <code>GM.info.grant</code></dd>
-      <dd>Added <code>GM.info.injectInto</code></dd>
-      <dd>Added <code>GM.info.require</code></dd>
-      <dd>Added <code>GM.info.runAt</code></dd>
+      <dd>Added <code>GM.info.script.grant</code></dd>
+      <dd>Added <code>GM.info.script.injectInto</code></dd>
       <dd>Added <code>GM.info.script.metadata</code></dd>
+      <dd>Added <code>GM.info.script.require</code></dd>
+      <dd>Added <code>GM.info.script.runAt</code></dd>
       <dd>Added CodeMirror <code>rulers</code> addon (off by default)</dd>
       <dd>Added Import from URL feature</dd>
       <dd>Added manually imported script to Log</dd>
