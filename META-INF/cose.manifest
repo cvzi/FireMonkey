@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 
 Name: manifest.json
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: XAu92A1IJCt+MRHE0BbWSCB7Wy4=
-SHA256-Digest: E7Uxi4yufbLkrXRzj/UqDqqP5kGM8KbB+Ubd9x845/4=
+SHA1-Digest: TVW++DMHJPLt2zwUTL1mktRUeGQ=
+SHA256-Digest: VEAoBX1jd860iQy22riIORDFMYmPNeE2kPPQHL0/Hao=
 
 Name: _locales/en/messages.json
 Digest-Algorithms: SHA1 SHA256
@@ -47,8 +47,8 @@ SHA256-Digest: /aHdzmLyHjhKe8oM8U7iNM+0i2QgBy89hnk5nvPT/mc=
 
 Name: content/help.html
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: iFaZqVh7/O0lA+wncuBwer0T8/E=
-SHA256-Digest: tX609Ce10ptmYzpGJXXq4qvqRypfbYt4frx51wcw3Vs=
+SHA1-Digest: iij1SaevnpFDZBWDBDzW4hnLo3Q=
+SHA256-Digest: 5ovNIG/LV/HBo4MgxiTentFHoNfKdmT1gKG/Bwrmrqg=
 
 Name: content/script.js
 Digest-Algorithms: SHA1 SHA256
@@ -82,8 +82,8 @@ SHA256-Digest: Ix8VHBvM5huqGvHuRQTx334MhstgNQWdJ2EAqSZcmDU=
 
 Name: content/background.js
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: 8iqouz7tTHB4JXxmbikpiv+s2r8=
-SHA256-Digest: /5lFv58VTap3HzbKEUvhpoEZfCK3WEcotn0nBnQ47Mc=
+SHA1-Digest: caE6CXWbMkApsJIgRNOECn2lZmY=
+SHA256-Digest: 6UW3RTifz72xrzNdkA3y2LmvL8UgvD4O4c+OT8NtEow=
 
 Name: content/cm-config.js
 Digest-Algorithms: SHA1 SHA256
@@ -157,8 +157,8 @@ SHA256-Digest: rYJ5EQJVYJ6pRbYnMs119I/l/x73aL2ufEp7vJjWAeo=
 
 Name: content/api.js
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: R4cPOOW7HybcQTFzot+9PvpS2f4=
-SHA256-Digest: yTQMF4Bdae6JJxRxMNG28EVL8PmSoo8w6JGGvrNUKYs=
+SHA1-Digest: Bumdk4dQrG/Av+s61QBLl8ChslU=
+SHA256-Digest: YpUfXkhYbKITSwZj9hHz+1ioDH0xrDgykgT2tkocVGQ=
 
 Name: content/i18n.js
 Digest-Algorithms: SHA1 SHA256
@@ -182,8 +182,8 @@ SHA256-Digest: +zlAkSlMRWsZGekwgx+uOb1j+JOx5+a8tDQ2ucoMyKo=
 
 Name: content/about.html
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: dmOu05sTewrKx9tqKZ1tE8Obyso=
-SHA256-Digest: 9mmtbqOJvFAx+twHU4IOcHNGTM1tyds0Uzi4Yaal8EE=
+SHA1-Digest: 6rqPdtrWrwpo3l3gnM9zqFZt+HA=
+SHA256-Digest: 0cPhOG8WD/rRI/qgv3URwBT299zeNBlVT1y/qm8UGx4=
 
 Name: content/installer.js
 Digest-Algorithms: SHA1 SHA256
@@ -232,8 +232,8 @@ SHA256-Digest: mVhI4RgAPgkF4KeCr9BfBA/Ll1sFlc0PEKhKEuUlYBE=
 
 Name: content/api-message.js
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: pnfwL55AQqZJaAgi610p22BeRbY=
-SHA256-Digest: jOZ4S5xF3eFLlrxkT0DhQV3jf2kCGwPzkKOEzJwgfKg=
+SHA1-Digest: Uz2KH1SiPTOrD4z8SHRzeHawZVE=
+SHA256-Digest: T9Ra5i67x0raUFBjht8l1aPt9NToFvyXIWFWz5geXpA=
 
 Name: content/about.css
 Digest-Algorithms: SHA1 SHA256
