@@ -1,6 +1,6 @@
 import {App} from './app.js';
 
-// ---------- API Message Handler (Side Effect) ------------
+// ---------- API Message Handler --------------------------
 export class OnMessage {
 
   static {

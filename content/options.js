@@ -233,7 +233,7 @@ class Script {
       });
     });
 
-    Script.process();
+    this.process();
   }
 
   static processButtons(e) {

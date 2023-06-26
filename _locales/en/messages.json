@@ -2,7 +2,6 @@
   "extensionName": { "message": "FireMonkey" },
   "extensionDescription": { "message": "Super Lightweight User Script and Style Manager" },
 
-
   "tabScript": { "message": "Tab Scripts & CSS" },
   "otherScript": { "message": "Other Scripts & CSS" },
   "scriptCommands": { "message": "Script Commands" },
