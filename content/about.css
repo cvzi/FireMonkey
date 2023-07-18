@@ -32,7 +32,7 @@ img {
 
 a[href^="https://github.com/"]::before {
   content: '';
-  background: url('../image/github.svg') no-repeat center / contain;
+  background: url('../image/logo/github.svg') no-repeat center / contain;
   display: inline-block;
   height: 1.1em;
   width: 1.1em;

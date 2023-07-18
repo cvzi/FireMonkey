@@ -253,7 +253,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
       }
 
       // check protocol
-      if (!['http:', 'https:'].includes(url.protocol)) {
+      if (!['http:', 'https:', 'blob:'].includes(url.protocol)) {
         API.log(`checkURL ${url} ➜ Unsupported Protocol ${url.protocol}`);
         return;
       }
@@ -268,6 +268,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
         'access-control-request-method', 'connection', 'content-length', 'cookie2', 'date', 'dnt', 'expect',
         'keep-alive', 'te', 'trailer', 'transfer-encoding', 'upgrade', 'via'];
 
+      init.headers ||= {};                                  // check init.headers
       Object.keys(init.headers).forEach(item => {
         const LC = item.toLowerCase();
         if (LC.startsWith('proxy-') || LC.startsWith('sec-') || forbiddenHeader.includes(LC)) {
