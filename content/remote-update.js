@@ -1,3 +1,16 @@
+// https://update.greasyfork.org/scripts/1/GreasemonkeyTampermonkeyViolentmonkey%20test%20style.user.js
+// https://update.greasyfork.org/scripts/1/GreasemonkeyTampermonkeyViolentmonkey%20test%20style.meta.js
+
+// The Accept header is not read - what you get is solely based on the extension.
+
+// The old URLs in the form
+
+// https://greasyfork.org/scripts/1-greasemonkey-tampermonkey-violentmonkey-test-style/code/GreasemonkeyTampermonkeyViolentmonkey%20test%20style.user.js
+// https://greasyfork.org/scripts/1-greasemonkey-tampermonkey-violentmonkey-test-style/code/GreasemonkeyTampermonkeyViolentmonkey%20test%20style.meta.js
+
+// https://update.greasyfork.org/scripts/369400/Local%20YouTube%20Downloader.user.js
+// https://update.greasyfork.org/scripts/369400/Local%20YouTube%20Downloader.meta.js
+
 import {App} from './app.js';
 
 // ---------- Remote Update --------------------------------
@@ -9,11 +22,11 @@ export class RemoteUpdate {                                 // bg options
       case item.updateURL.startsWith('https://greasyfork.org/scripts/'):
       case item.updateURL.startsWith('https://sleazyfork.org/scripts/'):
       case item.js && item.updateURL.startsWith('https://openuserjs.org/install/'):
-        this.#getMeta(item, manual);
+        this.getMeta(item, manual);
         break;
 
       case /^https:\/\/userstyles\.org\/styles\/\d+\/.+\.css/.test(item.updateURL):
-        this.#getStylishVersion(item, manual);
+        this.getStylishVersion(item, manual);
         break;
 
       // --- direct update
@@ -22,30 +35,29 @@ export class RemoteUpdate {                                 // bg options
     }
   }
 
-  static #getMeta(item, manual) {
+  static getMeta(item, manual) {
     const url = item.metaURL || item.updateURL.replace(/\.user\.(js|css)/i, '.meta.$1');
     fetch(url)
     .then(response => response.text())
-    .then(text => this.#needUpdate(text, item) ? this.getScript(item) :
+    .then(text => this.needUpdate(text, item) ? this.getScript(item) :
                       manual && App.notify(browser.i18n.getMessage('noNewUpdate'), item.name))
     .catch(error => App.log(item.name, `getMeta ${url} ➜ ${error.message}`, 'error'));
   }
 
-  static #getStylishVersion(item, manual) {
+  static getStylishVersion(item, manual) {
     const url = item.updateURL.replace(/(\d+\/.+)css/i, 'userjs/$1user.js');
     fetch(url)
     .then(response => response.text())
     .then(text => {
       const m = text.match(/@version\s+(\S+)/);
-      const version = m ? m[1].substring(2,10) : '';
-      version > item.version ? this.#getStylish(item, version) :
+      const version = m ? m[1].substring(2, 10) : '';
+      version > item.version ? this.getStylish(item, version) :
         manual && App.notify(browser.i18n.getMessage('noNewUpdate'), item.name);
     })
     .catch(error => App.log(item.name, `getMeta ${url} ➜ ${error.message}`, 'error'));
   }
 
-
-  static #getStylish(item, version) {
+  static getStylish(item, version) {
     const metaData =
 `/*
 ==UserStyle==
@@ -63,7 +75,7 @@ export class RemoteUpdate {                                 // bg options
     .catch(error => App.log(item.name, `getStylish ${item.updateURL} ➜ ${error.message}`, 'error'));
   }
 
-  static #needUpdate(text, item) {
+  static needUpdate(text, item) {
     const version = text.match(/@version\s+(\S+)/);         // check version
     return version && this.higherVersion(version[1], item.version);
   }

@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8">
     <title>Help</title>
-    <link href="help.css" rel="stylesheet">
+    <link href="iframe.css" rel="stylesheet">
     <link href="help-fm.css" rel="stylesheet">
     <script type="module" src="help.js"></script>
   </head>
   <body>
 
   <nav>
-    <a href="#Preamble">Preamble</a>
-    <div><a href="#how-to">How to Use</a>
+    <a href="#preamble">Preamble</a>
+    <div><a href="#how-to-use">How to Use</a>
       <ul>
         <li><a href="#toolbar">Toolbar Icon</a></li>
         <li><a href="#page-menu">Page Context Menu</a></li>
@@ -19,26 +19,26 @@
         <li><a href="#android">Firefox on Android</a></li>
       </ul>
     </div>
-    <div><a href="#Options">Options</a>
+    <div><a href="#options">Options</a>
       <ul>
         <li><a href="#auto-update-interval">Auto-Update Interval</a></li>
         <li><a href="#enable-storage">Enable Storage Sync</a></li>
         <li><a href="#counter">Counter</a></li>
         <li><a href="#global-script-exclude">Global Script Exclude Matches</a></li>
-        <li><a href="#Custom-Options-CSS">Custom Options CSS</a></li>
-        <li><a href="#Custom-Popup-CSS">Custom Popup CSS</a></li>
-        <li><a href="#CodeMirror">CodeMirror</a></li>
+        <li><a href="#custom-options-css">Custom Options CSS</a></li>
+        <li><a href="#custom-popup-css">Custom Popup CSS</a></li>
+        <li><a href="#codemirror">CodeMirror</a></li>
         <li><a href="#import-export">Preferences: Import/Export</a></li>
         <li><a href="#save">Save</a></li>
       </ul>
     </div>
-    <div><a href="#Script-CSS">Script & CSS</a>
+    <div><a href="#script-css">Script & CSS</a>
       <ul>
-        <li><a href="#Sidebar">Sidebar</a></li>
-        <li><a href="#Editing">Editing</a></li>
-        <li><a href="#Self-Update">Self-Update</a></li>
-        <li><a href="#Auto-Update">Update & Auto-Update</a></li>
-        <li class="arrow"><a href="#Metadata-Block">Metadata Block</a>
+        <li><a href="#sidebar">Sidebar</a></li>
+        <li><a href="#editing">Editing</a></li>
+        <li><a href="#self-update">Self-Update</a></li>
+        <li><a href="#auto-update">Update & Auto-Update</a></li>
+        <li class="arrow"><a href="#metadata-block">Metadata Block</a>
           <ul>
             <li><a href="#defaults">defaults</a></li>
             <li><a href="#name">@name</a></li>
@@ -51,18 +51,18 @@
             <li><a href="#matchAboutBlank">@matchAboutBlank</a></li>
             <li><a href="#icon">@icon</a></li>
             <li><a href="#require">@require</a></li>
-            <li><a href="#Match-Patterns">Match Patterns</a></li>
+            <li><a href="#match-patterns">Match Patterns</a></li>
             <li><a href="#include-exclude">@include - @exclude</a></li>
 
             <!-- <li><a href="#"></a></li> -->
           </ul>
         </li>
 
-        <li class="arrow"><a href="#Script-API">Script API</a>
+        <li class="arrow"><a href="#script-api">Script API</a>
           <ul>
             <!-- <li><a href="#forbidden-header-name">Forbidden header name</a></li> -->
             <li><a href="#storage">Script Storage</a></li>
-            <li><a href="#Dynamic-import">Dynamic import()</a></li>
+            <li><a href="#dynamic-import">Dynamic import()</a></li>
             <!-- <li><a href="#import-option">import Option</a></li> -->
 
             <li><a href="#addElement">addElement</a></li>
@@ -88,15 +88,15 @@
             <li><a href="#xmlHttpRequest">xmlHttpRequest</a></li>
           </ul>
         </li>
-        <li><a href="#Cookie-Isolation">Cookie Isolation</a></li>
-        <li><a href="#Detecting-JavaScript-Navigation">Detecting JavaScript Navigation</a></li>
+        <li><a href="#cookie-isolation">Cookie Isolation</a></li>
+        <li><a href="#detecting-javascript-navigation">Detecting JavaScript Navigation</a></li>
         <li><a href="#xray-vision">Xray Vision & Sharing objects with page scripts</a></li>
-        <li><a href="#UserCSS">UserCSS</a></li>
-        <li><a href="#UserStyle">UserStyle</a></li>
+        <li><a href="#userCSS">UserCSS</a></li>
+        <li><a href="#userStyle">UserStyle</a></li>
         <li><a href="#debugging">Debugging Script & CSS</a></li>
-        <li><a href="#Injection-Comparison">Injection Comparison</a></li>
+        <li><a href="#injection-comparison">Injection Comparison</a></li>
         <!-- <li><a href="#Performance-Test">Performance Test</a></li> -->
-        <li><a href="#JavaScript-Best-Practices">JavaScript Best Practices</a></li>
+        <li><a href="#javascript-best-practices">JavaScript Best Practices</a></li>
       </ul>
     </div>
     <a href="#Support">Support</a>
@@ -104,11 +104,11 @@
 
   <article>
 
-  <h1 id="Preamble">Preamble</h1>
+  <h1 id="preamble">Preamble</h1>
   <p><i>FireMonkey</i> is a totally new combined user-script and user-style manager. While it has similar functions to other user-Script managers like <i>Greasemonkey/Tampermonkey/Violentmonkey</i>, and user-style managers like <i>Stylish/Stylus/xStyle</i>, there are also differences. Similar to other userscript managers, scripts (or CSS) are injected in tabs when tab is reloading. <s>The behaviour differs from <i>Stylus</i> which can inject CSS into a tab and remove it without having to reload the tab.</s> <a href="#Live-update">ⓘ</a> To make permanent changes without reloading the tab is not possible with the current API but changes are planned as part of <a href="https://blog.mozilla.org/addons/2021/05/27/manifest-v3-update/" target="_blank">Manifest v3 update</a>.</p>
 
 
-  <p class="note">Injection into <code>page</code> context are prevented by Firefox on sites with restrictive Content Security Policy (CSP) e.g. github.com, gitee.com, twitter.com, mail.google.com (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1411641" title="CSP 'sandbox' directive prevents content scripts from matching, due to unique origin, breaking also browser features" target="_blank">Bug 1411641</a>), as well as certain <a href="#blocked">domains</a>.</p>
+  <p class="note">Injection into <code>page</code> context are prevented by Firefox on sites with restrictive Content Security Policy (CSP) e.g. github.com, gitee.com, twitter.com, mail.google.com (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1411641" title="CSP 'sandbox' directive prevents content scripts from matching, due to unique origin, breaking also browser features" target="_blank">Bug 1411641</a> fixed in Firefox 128), as well as certain <a href="#blocked">domains</a>.</p>
 
   <p><i>FireMonkey</i> v2.44 is expected to be fully compatible with all <i>Greasemonkey</i> GM4 compatible userscripts, and 90% of other userscripts. (You can post the issues to the <a href="#Support">Support</a>.)</p>
 
@@ -131,7 +131,15 @@
       <tr><th>GM_getResourceURL</th><td>if userscript processes the result before applying it <a href="#getResourceUrl">ⓘ</a></td><td>355 / 63,435 (0.56%) scripts use the API<br>24 / 63,435 (<b>0.03%</b>) scripts incompatible</td></tr> -->
       <tr><th>uncommon @grant</th><td><code>GM_cookie</code>, <code>GM_getTab</code>, <code>GM_getTabs</code>, <code>GM_saveTab</code> <a href="#api">ⓘ</a></td><td>55 / 63,435 (<b>0.08%</b>) scripts use these APIs</td></tr>
       <tr><th>uncommon @grant</th><td><code>window.close</code>, <code>window.focus</code>, <code>window.onurlchange</code> <a href="#api">ⓘ</a></td><td>483 / 63,435 (<b>0.76%</b>) scripts use these APIs<br>Probably a lot less as there would be duplicates</td></tr>
-      <tr><th>Content Security Policy (CSP)</th><td><code>unsafeWindow</code> or <code>page</code> context injection on pages with strict CSP that only work with <i>Tampermonkey</i> since <i>Tampermonkey</i> alters CSP <a href="#inject-into">ⓘ</a></td><td class="unknown"></td></tr>
+      <tr>
+        <th>Content Security Policy (CSP)</th>
+        <td><code>unsafeWindow</code> or <code>page</code> context injection on pages with strict CSP that may only work with <i>Tampermonkey</i> due to CSP relaxation <a href="#inject-into">ⓘ</a> <a href="https://github.com/Tampermonkey/tampermonkey/issues/1845" title="[CSP] Modify existing content security policy not work" target="_blank">ⓘ</a>
+        <blockquote>• Add-ons must not relax web page security headers, such as the Content Security Policy.
+          <cite><a href="https://extensionworkshop.com/documentation/publish/add-on-policies/" target="_blank">Add-on Policies</a></cite>
+        </blockquote>
+        </td>
+        <td class="unknown"></td>
+      </tr>
 
       <tr><th>&nbsp;</th><td colspan="2"></td></tr>
       <tr><th><b>UserStyle</b></th><td colspan="2"></td></tr>
@@ -165,29 +173,52 @@
 
 
   <h2 id="Quick-Fixes">Quick Fixes</h2>
-  <dl>
-    <dt>SyntaxError: <b>return</b> not in function</dt>
-    <dd>💡 Use Wrap code in <a href="#IIFE">IIFE</a></dd>
-    <dd><i>Greasemonkey</i>, <i>Tampermonkey</i> & <i>Violentmonkey</i> (as well as <i>Node.js</i>), wrap the userscripts in an anonymous IIFE (Immediately Invoked Function Expression) in order to limit its exposure to the page JavaScript. As a result, such JavaScript parse errors do not cause a problem, however that created a situation where developers write JavaScript with syntax errors.</dd>
-    <dd><a href="https://eslint.org/demo" target="_blank">ESLint</a> displays the parse error for above</dd>
-    <dd><a href="https://jshint.com/" target="_blank">JSHint</a> currently doesn't display the error</dd>
-    <dd>See also: <a href="https://github.com/jshint/jshint/issues/3612" target="_blank">JavaScript: Mark return out of function</a></dd>
 
-    <dt><code>@grant   none</code> & works in TM|VM</dt>
-    <dd>💡 Try setting <code>@inject-into   page</code> in <a href="#User-Metadata">User Metadata</a></dd>
+  <table>
+    <!-- <caption>Compatibility Issues</caption> -->
+    <thead>
+      <tr>
+        <th style="min-width: 30em;">Issue</th>
+        <th style="min-width: 20em;">Try</th>
+      </tr>
+    </thead>
+    <tbody class="slim">
+      <tr>
+        <td>SyntaxError: <b>return</b> not in function</td>
+        <td>Use Wrap code in <a href="#IIFE">IIFE</a><br>
+          <i>Greasemonkey</i>, <i>Tampermonkey</i> & <i>Violentmonkey</i> (as well as <i>Node.js</i>), wrap the userscripts in an anonymous <a href="https://developer.mozilla.org/docs/Glossary/IIFE" target="_blank">IIFE</a> (Immediately Invoked Function Expression) in order to limit its exposure to the page JavaScript. As a result, such JavaScript parse errors do not cause a problem, however that created a situation where developers write JavaScript with syntax errors.<br>
+          <a href="https://eslint.org/demo" target="_blank">ESLint</a> displays the parse error for above<br>
+          <a href="https://jshint.com/" target="_blank">JSHint</a> currently doesn't display the error<br>
+          See also: <a href="https://github.com/jshint/jshint/issues/3612" target="_blank">JavaScript: Mark return out of function</a></td>
+      </tr>
 
-    <dt>Userscript needs to run in sub-frames</dt>
-    <dd>💡 Try setting <code>@allFrames   true</code> in <a href="#User-Metadata">User Metadata</a></dd>
-    <dd>See also: <a href="#defaults">defaults</a></dd>
+      <tr>
+        <td><code>@grant   none</code> & works in TM|VM</td>
+        <td>Try setting <code>@inject-into   page</code> in <a href="#User-Metadata">User Metadata</a></td>
+      </tr>
 
-    <dt>No <code>@run-at</code> and script runs late</dt>
-    <dd>💡 Try setting <code>@run-at   document-end</code> in <a href="#User-Metadata">User Metadata</a></dd>
-    <dd>See also: <a href="#defaults">defaults</a></dd>
+      <tr>
+        <td>Userscript needs to run in sub-frames</td>
+        <td>Try setting <code>@allFrames   true</code> in <a href="#User-Metadata">User Metadata</a><br>
+          See also: <a href="#defaults">defaults</a></td>
+      </tr>
 
-    <dt><code>window.addEventListener('load', ...)</code> (or <code>'DOMContentLoaded'</code>) does not fire</dt>
-    <dd>💡 Try setting <code>@run-at   document-end</code> in <a href="#User-Metadata">User Metadata</a></dd>
-    <dd>See also: <a href="#run-at">@run-at</a></dd>
-  </dl>
+      <tr>
+        <td>No <code>@run-at</code> and script runs late</td>
+        <td>Try setting <code>@run-at   document-end</code> in <a href="#User-Metadata">User Metadata</a><br>
+          See also: <a href="#defaults">defaults</a></td>
+      </tr>
+
+      <tr>
+        <td><code>window.addEventListener('load', ...)</code><br>
+          (or <code>'DOMContentLoaded'</code>) does not fire</td>
+        <td>Try setting <code>@run-at   document-end</code> in <a href="#User-Metadata">User Metadata</a><br>
+          See also: <a href="#defaults">defaults</a></td>
+      </tr>
+
+    </tbody>
+  </table>
+
 
   <h2 id="manifest-v3">Manifest V3</h2>
   <p>Changes introduced by Chrome in manifest v3 (MV3) will have considerable effect on the extensions.</p>
@@ -289,11 +320,11 @@
 
   </ul>
 
-  <h1 id="how-to">How to Use</h1>
+  <h1 id="how-to-use">How to Use</h1>
 
   <h2 id="toolbar">Toolbar Icon</h2>
 
-  <h3>Toolbar Icon Context Menu  <span>(not available on Android)</span></h3>
+  <h3>Toolbar Icon Context Menu <span>(not available on Android)</span></h3>
 
   <dl>
     <dt><img src="../image/gear.svg" alt=""> Options</dt>
@@ -410,12 +441,24 @@
   <p>Scripts can be directly installed from any script ending in <code>.user.js/.user.css</code> (remote or local file system) if loaded into a tab (open or drag & drop). In case of HTTP/s links, the same link will be set for script update. (v2.57)</p>
   <p><s>Due to sandbox CSP header on <code>https://raw.githubusercontent.com/........uers.js</code> tab is forwarded to <code>cdn.jsdelivr.net</code> mirror.</s> (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1411641" title="CSP 'sandbox' directive prevents content scripts from matching, due to unique origin, breaking also browser features" target="_blank">Bug 1411641</a>).</p>
 
+  <h3>Using External Editors</h3>
+  <p>It is not possible to directly edit the userscripts with an external editor, however, you can try the following:</p>
+  <ul>
+    <li>Export the userscript to the computer</li>
+    <li>Open the exported userscript with the desired editor</li>
+    <li>Make the necessary edits & save</li>
+    <li>Open the userscript in a Firefox tab</li>
+    <li>Update the userscript</li>
+    <li>Keep the tab & refresh <kbd>F5</kbd> then <kbd>Enter</kbd> for subsequent edits</li>
+  </ul>
+
+
   <h2 id="android" class="experimental">📱 Firefox on Android</h2>
   <p>Support is experimental and based on user feedback.</p>
 
 
 
-  <h1 id="Options">Options</h1>
+  <h1 id="options">Options</h1>
 
   <h2 id="auto-update-interval">Auto-Update Interval</h2>
 
@@ -454,7 +497,7 @@
   <p>Exclude Match pattens (one per line) to prevent all scripts (not CSS) from running on them. Changes to Global Script Exclude Matches will unregister all running script. Once tab is reloaded or on new tab, new settings will take effect.</p>
   <p class="note">Invalid match pattern will cause all scripts to fail.</p>
 
-  <h2 id="Custom-Options-CSS">Custom Options CSS <span>(advanced users)</span></h2>
+  <h2 id="custom-options-css">Custom Options CSS <span>(advanced users)</span></h2>
   <p>Customize Options page style and/or CodeMirror style/theme with valid CSS.</p>
   <p class="warning">Changes can break the layout.</p>
 
@@ -513,11 +556,11 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {<span class="property">color<
 </pre>
 
 
-  <h2 id="Custom-Popup-CSS">Custom Popup CSS <span>(advanced users)</span></h2>
+  <h2 id="custom-popup-css">Custom Popup CSS <span>(advanced users)</span></h2>
   <p>Customize Toolbar Popup style/theme with valid CSS.</p>
   <p class="warning">Changes can break the layout.</p>
 
-  <h2 id="CodeMirror"><img src="../image/codemirror.svg" alt=""> CodeMirror  <span>(advanced users)</span></h2>
+  <h2 id="codemirror"><img src="../image/logo/codemirror.svg" alt=""> CodeMirror  <span>(advanced users)</span></h2>
   <p>Customize <a href="https://codemirror.net/doc/manual.html#config" target="_blank">CodeMirror Configuration</a> & <a href="https://jshint.com/docs/options/" target="_blank">JSHint Options</a> with a <b>valid JSON</b>. JSHint is set to ECMAScript 2020 ES11 & fairly strict guidelines for coding excellence.</p>
 
   <dl>
@@ -603,9 +646,9 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {<span class="property">color<
 
 
 
-  <h1 id="Script-CSS">Script & CSS</h1>
+  <h1 id="script-css">Script & CSS</h1>
 
-  <h2 id="Sidebar"><img src="../image/sidebars.svg" alt=""> Sidebar</h2>
+  <h2 id="sidebar"><img src="../image/sidebars.svg" alt=""> Sidebar</h2>
 
   <dl>
     <dt>Script List</dt>
@@ -634,12 +677,12 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {<span class="property">color<
 
     <dt>📥 Import from Stylus</dt>
     <dd>Export styles from <i>Stylus</i> and Import the JSON (on pop-up change the file type selection to <i>All Files</i>)</dd>
-    <dd>Script/CSS with the same name will be overwritten without warning <i>(note: <a href="#UserStyle">UserStyle</a>)</i></dd>
+    <dd>Script/CSS with the same name will be overwritten without warning <i>(note: <a href="#userStyle">UserStyle</a>)</i></dd>
 
   </dl>
 
 
-  <h2 id="Editing">Editing</h2>
+  <h2 id="editing">Editing</h2>
   <p><a href="https://codemirror.net/" target="_blank">CodeMirror</a> editor and a number of its addons is used for easier editing <span class="small">(v2.0)</span>.</p>
 
   <h3>CodeMirror & addon Guide</h3>
@@ -761,7 +804,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {<span class="property">color<
   <h3>Editor Area Statistic Info</h3>
   <p>Statistical information is displayed under the the editor of the Script/CSS.</p>
 
-  <h2 id="Self-Update">Self-Update</h2>
+  <h2 id="self-update">Self-Update</h2>
   <p>For users that edit scripts regularly, a proper editor is more convenient. You can then update the installed version by:</p>
   <ul>
     <li>Copy & Paste directly into the script Editor</li>
@@ -770,7 +813,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {<span class="property">color<
       <br>In case of repeated edit, you can keep the tab open and refresh and confirm to update the old one.</li>
   </ul>
 
-  <h2 id="Auto-Update">Update & Auto-Update</h2>
+  <h2 id="auto-update">Update & Auto-Update</h2>
   <p>Any target can be set for <code>@updateURL</code> as long it directly leads to the final file and it is in plain text. The <code>.js</code> or <code>.css</code> file extensions are not necessary although it makes sense to have them. The <code>.user.</code> is not necessary.</p>
   <p><i>FireMonkey</i> uses <code>@version</code> for the update process and both the current file and the update file must have <code>@version</code> and the version of the target file must be higher.</p>
 
@@ -804,7 +847,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {<span class="property">color<
     <tbody class="slim">
 
       <tr><th>@updateURL</th><td class="pass">update target</td><td class="fail"></td><td>JSON</td><td class="unknown"></td></tr>
-      <tr><th>@downloadURL</th><td class="pass">= @updateURL</td><td class="fail"></td><td>update target</td><td>update target <a href="https://violentmonkey.github.io/api/metadata-block/#downloadurl" title="Metadata Block @downloadURL" target="_blank">ⓘ</a></td></tr>
+      <tr><th>@downloadURL</th><td class="pass">= @updateURL OR @metaURL</td><td class="fail"></td><td>update target</td><td>update target <a href="https://violentmonkey.github.io/api/metadata-block/#downloadurl" title="Metadata Block @downloadURL" target="_blank">ⓘ</a></td></tr>
       <tr><th>install source</th><td class="pass"></td><td class="fail"></td><td class="unknown"></td><td>update target <a href="https://violentmonkey.github.io/api/metadata-block/#downloadurl" title="Automatically added when using 'Install from URL.'" target="_blank">ⓘ</a></td></tr>
       <tr><th>@metaURL <span>(v2.68)</span></th><td class="pass"></td><td class="fail"></td><td class="fail"></td><td class="fail"></td></tr>
       <tr><th>meta.js</th><td class="pass"></td><td>update target <a href="https://github.com/greasemonkey/greasemonkey/issues/3057" title="Auto-Update Scripts" target="_blank">ⓘ</a></td><td class="pass"></td><td class="pass"></td></tr>
@@ -830,9 +873,9 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {<span class="property">color<
 
 
 
-  <h1 id="Metadata-Block">Metadata Block</h1>
+  <h1 id="metadata-block">Metadata Block</h1>
   <p>For easier compatibility, format is similar to <i>Greasemonkey</i> Metadata Block for UserScripts. The commenting is different for CSS and as a result a uniform commenting for Metadata Block can be used. The Metadata Block identifier (case-insensitive e.g. ==userscript== etc) for UserScript is <code>==UserScript== ... ==/UserScript==</code> and for UserCSS is <code>==UserCSS== ... ==/UserCSS==</code>. For clarity, it is best to have the Metadata Block on top (or after <code>'use strict';</code> if wanted, but <i>FireMonkey</i> can pick it up from anywhere within the code.</p>
-  <p class="note">Read <a href="#UserStyle">UserStyle</a> for <code>==UserStyle== ... ==/UserStyle==</code></p>
+  <p class="note">Read <a href="#userStyle">UserStyle</a> for <code>==UserStyle== ... ==/UserStyle==</code></p>
 
 
   <p class="caption">JS Single-line Comment <span>(better compatibility)</span></p>
@@ -893,7 +936,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {<span class="property">color<
 
 @version            <i>needed for updates</i>
 @updateURL          <i>needed for updates</i>
-@metaURL            <i>meta.js/meta.css URL (v2.8)</i>
+@metaURL            <i>meta.js/meta.css URL (v2.68)</i>
 
 @match
 @exclude-match
@@ -1071,9 +1114,9 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {<span class="property">color<
   <p>Userscripts will have access to all available APIs and therefore <code>@grant</code> is not needed, however the following has been implemented.</p>
 
   <ul>
-    <li>v2.42: Experimental <code>@grant</code> background processing was added to auto-disable GM_* API if userScript supports async type GM.* API</li>
-    <li>v2.45: To prevent creating unnecessary message listeners, <code>@grant</code> is required for GM registerMenuCommand</li>
-    <li>v2.68: <code>GM_getResourceText/GM.getResourceText</code> affects the processing of <code>@resource</code>. <a href="#getResourceText">ⓘ</a></li>
+    <li>Required for GM registerMenuCommand, to prevent creating unnecessary message listeners (v2.45)</li>
+    <li>Required for GM getResourceText, which affects the processing of <code>@resource</code> (v2.68) <a href="#getResourceText">ⓘ</a></li>
+    <li>Required for sync GM_* storage APIs, and favours async GM.* API if both GM_* & GM.* storage APIs are granted (v2.42, updated v2.68)</li>
   </ul>
 
 
@@ -1081,7 +1124,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {<span class="property">color<
 
 
   <div class="grid-2">
-  <pre><span class="comment">// ==UserScript==
+<pre><span class="comment">// ==UserScript==
 // @name            Script A
 // @match           https://*.example.com/*
 // @grant           GM.xmlHttpRequest
@@ -1094,18 +1137,18 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {<span class="property">color<
   }
 });</pre>
 
-    <pre><span class="comment">// ==UserScript==
-  // @name            Script B
-  // @match           https://*.example.com/*
-  // ==/UserScript==</span>
+<pre><span class="comment">// ==UserScript==
+// @name            Script B
+// @match           https://*.example.com/*
+// ==/UserScript==</span>
 
 
-  <span class="gm">GM.xmlHttpRequest</span>({
-    url: <span class="string">'https://abcd.com/'</span>,
-    <span class="method">onload</span>: response =&gt; {
-      <span class="object">console</span>.<span class="method">log</span>(response.<span class="property">responseText</span>);
-    }
-  });</pre>
+<span class="gm">GM.xmlHttpRequest</span>({
+  url: <span class="string">'https://abcd.com/'</span>,
+  <span class="method">onload</span>: response =&gt; {
+    <span class="object">console</span>.<span class="method">log</span>(response.<span class="property">responseText</span>);
+  }
+});</pre>
   </div>
 
 
@@ -1226,7 +1269,8 @@ element.<span class="property">innerHTML</span> = dom;
         <td><span class="pass">content</span> <a href="https://github.com/greasemonkey/greasemonkey/blob/efd22a93121225ada47f2fe9f021af0ab6100c21/src/user-script-obj.js#L327" title ="= window.wrappedJSObject" target="_blank">ⓘ</a></td>
         <td>
           <span class="pass">content</span><br>
-          <span class="fail">page</span>
+          <span class="fail">page</span><br>
+          <span class="unknown">userScript (v4.18.0)</span>
         </td>
         <td>
           <span class="fail">content</span> <a href="https://violentmonkey.github.io/api/metadata-block/#inject-into" title="In this mode, unsafeWindow refers to the global object in content script. As a result, the script can access and modify the page's DOM, but cannot access JavaScript objects of the web page.">ⓘ</a><br>
@@ -1244,7 +1288,8 @@ element.<span class="property">innerHTML</span> = dom;
         <td><span class="pass">content</span></td>
         <td>
           <span class="pass">content</span><br>
-          <span class="pass">page</span>
+          <span class="pass">page</span><br>
+          <span class="unknown">userScript (v4.18.0)</span>
         </td>
         <td>
           <span class="pass">content</span><br>
@@ -1261,7 +1306,8 @@ element.<span class="property">innerHTML</span> = dom;
         <td><span class="pass">content</span></td>
         <td>
           <span class="pass">content</span><br>
-          <span class="fail">page</span>
+          <span class="fail">page</span><br>
+          <span class="unknown">userScript (v4.18.0)</span>
         </td>
         <td>
           <span class="pass">content</span><br>
@@ -1328,9 +1374,10 @@ element.<span class="property">innerHTML</span> = dom;
     <li><q>Add-ons must not relax web page security headers, such as the Content Security Policy.</q> (<a href="https://extensionworkshop.com/documentation/publish/add-on-policies/#development-practices" target="_blank">Add-on Policies</a>)</li>
     <li><q>It is also worth noting that the hack with removing the CSP can cause a conflict with other addons that use CSP to block content (like uBlock Origin)</q>. (<a href="https://github.com/violentmonkey/violentmonkey/issues/1001#issuecomment-643576816" title="[Firefox] Can't modify page properties on sites which use CSP" target="_blank">ⓘ</a>)</li>
     <li><a href="https://github.com/Tampermonkey/tampermonkey/issues/1489" target="_blank">Tampermonkey should not modify CSP on websites where it is disabled</a></li>
+    <li><a href="https://github.com/violentmonkey/violentmonkey/issues/1873" target="_blank">Circumvent TrustedHTML errors</a></li>
+    <li><a href="https://github.com/violentmonkey/violentmonkey/issues/1866" target="_blank">Possible to allow running inlined wasm just like JS despite CSP</a></li>
+    <li><a href="https://github.com/violentmonkey/violentmonkey/issues/1001" target="_blank">Can't modify page properties on sites which use CSP</a></li>
   </ul>
-
-
 
 
   <h2 id="var" class="experimental">@var</h2>
@@ -1661,7 +1708,7 @@ body {
 
 
 
-  <h2 id="Match-Patterns">Match Patterns</h2>
+  <h2 id="match-patterns">Match Patterns</h2>
 
   <p><a href="https://developer.mozilla.org/docs/Mozilla/Add-ons/WebExtensions/match_patterns" target="_blank">Match Patterns</a> is used in <code>match/exclude-match</code> and <a href="https://developer.mozilla.org/docs/Mozilla/Add-ons/WebExtensions/manifest.json/content_scripts#globs" target="_blank">globs</a> in <code>includeGlobs/excludeGlobs</code>.</p>
 
@@ -1954,7 +2001,7 @@ body {
 
 
 
-  <h1 id="Script-API"><img src="../image/js.svg" alt=""> Script API</h1>
+  <h1 id="script-api"><img src="../image/js.svg" alt=""> Script API</h1>
   <p><i>FireMonkey</i> supports both GM3 & GM4 style (i.e. GM.* & GM_*) APIs.</p>
 
 
@@ -1978,10 +2025,6 @@ body {
       <tr><th>GM.listValues</th><td class="pass async"></td><td class="pass async"></td><td class="pass async"></td><td class="pass async"></td><td>77</td></tr>
       <tr><th>GM.addValueChangeListener</th><td class="pass callback"></td><td class="fail"></td><td class="pass callback"></td><td class="fail"></td><td>10</td></tr>
       <tr><th>GM.removeValueChangeListener</th><td class="pass sync"></td><td class="fail"></td><td class="pass sync"></td><td class="fail"></td><td>1</td></tr>
-
-      <tr><th>GM.getValues <span>(v2.68)</span></th><td class="pass async"></td><td class="fail"></td><td class="fail"></td><td class="fail"></td><td></td></tr>
-      <tr><th>GM.setValues <span>(v2.68)</span></th><td class="pass async"></td><td class="fail"></td><td class="fail"></td><td class="fail"></td><td></td></tr>
-      <tr><th>GM.deleteValues <span>(v2.68)</span></th><td class="pass async"></td><td class="fail"></td><td class="fail"></td><td class="fail"></td><td></td></tr>
 
 
       <tr><th><b>DOM</b></th><td colspan="5"></td></tr>
@@ -2024,9 +2067,6 @@ body {
       <tr><th>GM_addValueChangeListener</th><td class="pass callback"></td><td class="fail"></td><td class="pass callback"></td><td class="pass callback"></td><td>209</td></tr>
       <tr><th>GM_removeValueChangeListener</th><td class="pass sync"></td><td class="fail"></td><td class="pass sync"></td><td class="pass sync"></td><td>77</td></tr>
 
-      <tr><th>GM_getValues <span>(v2.68)</span></th><td class="pass sync"></td><td class="fail"></td><td class="fail"></td><td class="fail"></td><td></td></tr>
-      <tr><th>GM_setValues <span>(v2.68)</span></th><td class="pass sync"></td><td class="fail"></td><td class="fail"></td><td class="fail"></td><td></td></tr>
-      <tr><th>GM_deleteValues <span>(v2.68)</span></th><td class="pass sync"></td><td class="fail"></td><td class="fail"></td><td class="fail"></td><td></td></tr>
 
       <tr><th><b>DOM</b></th><td colspan="5"></td></tr>
 
@@ -2083,6 +2123,11 @@ body {
       <tr><th>window.onurlchange <sup>4</sup></th><td class="fail"></td><td class="fail"></td><td class="pass callback">v4.11 <a href="https://www.tampermonkey.net/changelog.php?ext=dhdg&show=fire" target="_blank">ⓘ</a></td><td class="fail"></td><td>69</td></tr>
 
       <tr><th>&nbsp;</th><td colspan="5"></td></tr>
+
+      <tr><th>window.external</th><td class="fail"><a href="https://github.com/erosman/support/issues/582" title="Please add FireMonkey to window.external" target="_blank">ⓘ</a></td><td class="fail"></td><td class="pass callback experimental">v4.2 <a href="https://www.tampermonkey.net/changelog.php?more=true&show=dhdg#v4.2" target="_blank">ⓘ</a></td><td class="pass async">v2.12.8 <a href="https://github.com/violentmonkey/violentmonkey/releases/tag/v2.12.8" target="_blank">ⓘ</a></td><td>n/a</td></tr>
+
+
+      <tr><th>&nbsp;</th><td colspan="5"></td></tr>
       <tr>
         <th>📥 Injected Scripts
             <br><span>✔ every page</span>
@@ -2137,10 +2182,10 @@ body {
 
       <tr>
         <th>👥 Firefox Users</th>
-        <td>1400</td>
-        <td>218k</td>
-        <td>593k</td>
-        <td>72k</td>
+        <td>1610</td>
+        <td>197k</td>
+        <td>590k</td>
+        <td>74k</td>
         <td></td>
       </tr>
 
@@ -2148,7 +2193,7 @@ body {
         <th>🔄 Last Update</th>
         <td>2023</td>
         <td>2021</td>
-        <td>2022</td>
+        <td>2023</td>
         <td>2023</td>
         <td></td>
       </tr>
@@ -2161,7 +2206,7 @@ body {
   <p><sup>2</sup> <code>window.close</code> grant results is overwriting the global <a href="https://developer.mozilla.org/docs/Web/API/Window/close" target="_blank">window.close()</a> and bypassing the safeguard to close a window that it has not opened. Such grant would allow malware userscripts to run code and hide the result by closing the window before user has a change to notice. Furthermore, the choice to close a window/tab opened by the user, should remain with the user. Tabs opened with GM <a href="#openInTab">openInTab</a> can be closed with JavaScript <code>window.close()</code> <span class="small">(v2.45)</span>.  </p>
   <p><sup>3</sup> <code>window.focus</code> grant results is overwriting the global <a href="https://developer.mozilla.org/docs/Web/API/Window/focus" target="_blank">window.focus()</a>. Such grant could be disruptive in cases where user is playing a game or in the middle of something in another window/tab and the userscript in the background causes its window/tab to become active and come to the foreground. Furthermore, the choice to focus a window/tab, should remain with the user.</p>
   <p><sup>4</sup> <code>window.onurlchange</code> is an experimental implementation in Tampermonkey 4.11.6120 (2020-09-17).</p>
-  <p class="note">Alternative: <a href="#Detecting-JavaScript-Navigation">Detecting JavaScript Navigation</a></p>
+  <p class="note">Alternative: <a href="#detecting-javascript-navigation">Detecting JavaScript Navigation</a></p>
 
 
 
@@ -2234,10 +2279,10 @@ body {
 
       <tr>
         <th>👥 Firefox Users</th>
-        <td>1400</td>
-        <td>76k</td>
-        <td>50k</td>
-        <td>280</td>
+        <td>1610</td>
+        <td>84k</td>
+        <td>42k</td>
+        <td>275</td>
       </tr>
 
       <tr>
@@ -2375,7 +2420,7 @@ body {
 
 
 
-<h2 id="Dynamic-import">ℹ️ Dynamic import()</h2>
+<h2 id="dynamic-import">ℹ️ Dynamic import()</h2>
 <p>JavaScript ECMAScript 2020 (ES11) dynamic <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/import" target="_blank">import()</a> can be used in a userscript but there are caveats.</p>
 
 <dl>
@@ -2745,7 +2790,7 @@ style.<span class="property">textContent</span> = <span class="string">`... css 
 
   <p><b>Return value:</b> response <code>object</code> || <code>undefined</code></p>
 
-  <p class="warning">Since v2.33 successful GM.fetch returns an object in all successful cases.</p>
+  <p class="warning">Since v2.33, successful GM.fetch returns an object in all successful cases.</p>
 
   <!-- <p class="note"><i>FireMonkey</i> GM <code>fetch</code> fixes <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1405971" title="Webextension UUID leak via Fetch requests" target="_blank">Bug 1405971</a>.</p> -->
 
@@ -3097,7 +3142,7 @@ xhr.<span class="method">send</span>(<span class="keyword">null</span>);
 <span class="gm">GM.openInTab</span>(url);
 <span class="gm">GM_openInTab</span>(url, open_in_background);
 </pre>
-  <p>The default value for <code>open_in_background</code> honours Firefox configuration. Tabs opened with GM openInTab can be closed with JavaScript <code>window.close()</code> <span class="small">(v2.45)</span>.</p>
+  <p>The default value for <code>open_in_background</code> honours Firefox configuration. Tabs opened with GM openInTab can be closed with JavaScript <code>window.close()</code> <span class="small">(v2.45) (not supported on Android <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1817806" title="Support `openerTabId` in `tabs.create()` on Android" target="_blank">ⓘ</a>)</span> .</p>
 
   <p><b>Return value:</b> <code>Boolean</code> <code>true/false</code> <span class="experimental">(v2.48)</span></p>
 
@@ -3695,6 +3740,8 @@ popup.<span class="method">addStyle</span>(css);
   },
 
   <span class="comment">// script data</span>
+  isIncognito:      <span class="value">true/false</span>,                      <span class="comment">// FM 2.73|TM 4.11|VM 2.16.0</span>
+                                                     <span class="comment">// since it is script data, it is better under info.script.isIncognito</span>
   scriptMetaStr:    <span class="string">'script metadata'</span>,               <span class="comment">// FM|GM|VM without start/end strings, TM with</span>
                                                      <span class="comment">// since it is script data, it is better under info.script.metadata</span>
   script: {
@@ -3715,6 +3762,7 @@ popup.<span class="method">addStyle</span>(css);
     injectInto:     <span class="string">'e.g. page'</span>,                     <span class="comment">// FM|VM, VM: info.injectInto</span>
     namespace:      <span class="string">''</span>,                              <span class="comment">// FM|VM: string, GM|TM: string|null</span>
     metadata:       <span class="string">'script metadata'</span>,               <span class="comment">// FM only, TM under info.script.header</span>
+    isIncognito:    <span class="value">true/false</span>,                      <span class="comment">// FM only</span>
   }
 }</pre>
 
@@ -3876,7 +3924,7 @@ popup.<span class="method">addStyle</span>(css);
 
 
 
-  <h2 id="Cookie-Isolation">Cookies Isolation</h2>
+  <h2 id="cookie-isolation">Cookies Isolation</h2>
   <p>Browsing modes in Firefox can be divided into 3 distinct modes: <i>normal, container, & private/incognito</i>.</p>
   <p>JavaScript <code>xmlHttpRequest/fetch</code> send cookies and credentials with their HTTP requests. In web pages, <code>xmlHttpRequest/fetch</code> send cookies according to the mode of the tab i.e. cookies belonging to normal browsing mode are not sent when in container or private mode, and vice versa. Cookies in each mode are isolated to preserve users' security and privacy.</p>
 
@@ -4051,7 +4099,7 @@ popup.<span class="method">addStyle</span>(css);
 
 
 
-  <h2 id="Detecting-JavaScript-Navigation">ℹ️ Detecting JavaScript Navigation</h2>
+  <h2 id="detecting-javascript-navigation">ℹ️ Detecting JavaScript Navigation</h2>
   <p>When sites use JavaScript to navigate, Firefox API does not detect the navigation and does not re-inject the userScript/userCSS. In case of userCSS it does not matter since the rules will continue to apply nonetheless, but in case of userScript, it needs to re-run. One way to detect JavaScript navigation is to use <a href="https://developer.mozilla.org/docs/Web/API/MutationObserver" target="_blank">MutationObserver</a> with appropriate <a href="https://developer.mozilla.org/docs/Web/API/MutationObserverInit" target="_blank">MutationObserverInit</a>.</p>
 
 
@@ -4251,7 +4299,7 @@ if(... condition ...) { sendMessage(data); }`</span>;
 
 
 
-  <h2 id="UserCSS"><img src="../image/css.svg" alt=""> UserCSS</h2>
+  <h2 id="userCSS"><img src="../image/css.svg" alt=""> UserCSS</h2>
 
   <p>Standard <a href="https://developer.mozilla.org/docs/Web/CSS" target="_blank">CSS (Cascading Style Sheets)</a> can be injected directly into a page. If the goal is to inject CSS, it is by far more efficient to insert CSS as UserCSS, instead of using UserScript to inject CSS. Furthermore, CSS rules will apply to newly created elements in dynamically updated pages (e.g. on scroll) while JavaScript would need additional listeners to wait for new element to be created and then run then code again.</p>
 
@@ -4394,7 +4442,7 @@ if(... condition ...) { sendMessage(data); }`</span>;
 </pre>
 
 
-  <h2 id="UserStyle"><img src="../image/css.svg" alt=""> UserStyle</h2>
+  <h2 id="userStyle"><img src="../image/css.svg" alt=""> UserStyle</h2>
 
   <p>Partial compatibility with standard CSS <a href="https://developer.mozilla.org/docs/Web/CSS/Syntaxp" target="_blank">syntax</a> UserStyle <code>==UserStyle== ... ==/UserStyle==</code> is available. All <code>url()</code>, <code>url-prefix()</code> & <code>domain()</code> are processed. Few very basic <code>regexp()</code> are converted to match pattern but other sections with <code>regexp()</code> are ignored since browser API does not support Regular Expression.</p>
 
@@ -4510,7 +4558,7 @@ ReferenceError: abc is not defined[Learn More]                        1f0135df-f
     <dd>You can see the actual blob JavaScript in <a href="https://developer.mozilla.org/docs/Tools" target="_blank">Developer Tools</a> (<kbd>F12</kbd>) <b>Debugger</b> tab under <code>FireMonkey://userscript/</code> (v2.68) (<code>user-script://FireMonkey/</code> pre-2.68) (you may have to refresh the page)</dd>
     <dd>See also:
       <ul>
-        <li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1824910" target="_blank">Display inconsistency of folder & file</a> (Fixed in FireFox 114)</li>
+        <li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1824910" target="_blank">Display inconsistency of folder & file</a> (Fixed in Firefox 114)</li>
         <li><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1829460" target="_blank">Display inconsistency of sourceURL containing a URL</a></li>
       </ul>
       </dd>
@@ -4527,7 +4575,7 @@ ReferenceError: abc is not defined[Learn More]                        1f0135df-f
 
   </dl>
 
-  <h2 id="Injection-Comparison">Injection Comparison</h2>
+  <h2 id="injection-comparison">Injection Comparison</h2>
 
   <h4>Other userScript/userStyle Managers</h4>
   <ul>
@@ -4556,7 +4604,7 @@ ReferenceError: abc is not defined[Learn More]                        1f0135df-f
 
 
 
-  <h2 id="JavaScript-Best-Practices">JavaScript Best Practices</h2>
+  <h2 id="javascript-best-practices">JavaScript Best Practices</h2>
   <ul>
     <li><a href="https://google.github.io/styleguide/jsguide.html" target="_blank">Google JavaScript Style Guide</a></li>
     <li><a href="https://contribute.jquery.org/style-guide/js/" target="_blank">JavaScript Style Guide</a></li>

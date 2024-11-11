@@ -5,6 +5,7 @@ body.dark {
   --bg: #000;
   --hover: #888;
   --btn-bg: #666;
+  --btn-hover: #888;
   --border: #777;
   --alt-bg: #444;
   --link: #0ef;
@@ -26,6 +27,7 @@ body.dark {
     --bg: #fff;
     --hover: #eaeaea;
     --btn-bg: #f5f5f5;
+    --btn-hover: #eaeaea;
     --border: #ddd;
     --alt-bg: #f5f5f5;
     --link: #08f;
@@ -61,6 +63,19 @@ section {
   padding: 0;
 }
 
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+code {
+  font-size: 1.2em;
+  padding: 0 0.3em;
+  background-color: var(--code);
+  white-space: break-spaces;
+}
+
+/* ----- input ----- */
 select,
 textarea,
 input[type="number"],
@@ -74,18 +89,23 @@ input[type="url"] {
   border-radius: 0.3em;
 }
 
-a {
-  color: var(--link);
-  text-decoration: none;
+::placeholder {
+  opacity: 0.5;
+  font-style: italic;
 }
 
-code {
-  font-size: 1.2em;
-  padding: 0 0.3em;
-  background-color: var(--code);
-  white-space: break-spaces;
+.invalid, input:invalid {
+  box-shadow: 1px 1px 4px #f20, -1px -1px 4px #f20;
 }
 
+/* ----- Navigation ----- */
+input[name="nav"],
+input[type="checkbox"].control {
+  display: none;
+}
+/* ----- /input ----- */
+
+/* ----- button ----- */
 button {
   background: var(--btn-bg);
   color: inherit;
@@ -105,22 +125,8 @@ button:disabled {
 button > * {
   pointer-events: none;
 }
-
-::placeholder {
-  opacity: 0.5;
-  font-style: italic;
-}
+/* ----- /button ----- */
 
 .grid {
   display: grid;
-}
-
-.invalid, input:invalid {
-  box-shadow: 1px 1px 4px #f20, -1px -1px 4px #f20;
-}
-
-/* ----- Navigation ----- */
-input[name="nav"],
-input[type="checkbox"].control {
-  display: none;
 }

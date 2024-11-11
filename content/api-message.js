@@ -45,7 +45,7 @@ export class OnMessage {
       case 'deleteValue':
         // e is an array
         e.forEach(item => {
-          if (pref[id].storage.hasOwnProperty(item)) {
+          if (Object.hasOwn(pref[id].storage, item)) {
             delete pref[id].storage[item];
             needUpdate = true;
           }
@@ -78,13 +78,16 @@ export class OnMessage {
         });
 
       case 'openInTab':
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=1817806
+        // Support `openerTabId` in `tabs.create()` on Android
+        const createObj = {url: e.url, active: e.active, openerTabId: sender.tab.id};
+        App.android && delete createObj.openerTabId;
         // Promise with tabs.Tab OR reject with error message
-        return browser.tabs.create({url: e.url, active: e.active, openerTabId: sender.tab.id})
-          .catch(logError);
+        return browser.tabs.create(createObj).catch(logError);
 
       case 'setClipboard':
         // Promise resolve with value undefined OR reject with error message
-        let type = e.type;
+        const type = e.type;
         if (type === 'text/plain') {
           return navigator.clipboard.writeText(e.data).catch(logError);
         }
@@ -131,11 +134,11 @@ export class OnMessage {
 
         try {
           switch (e.init.responseType) {
-            case 'json': res['json'] = await response.json(); break;
-            case 'blob': res['blob'] = await response.blob(); break;
-            case 'arrayBuffer': res['arrayBuffer'] = await response.arrayBuffer(); break;
-            case 'formData': res['formData'] = await response.formData(); break;
-            default: res['text'] = await response.text();
+            case 'json': res.json = await response.json(); break;
+            case 'blob': res.blob = await response.blob(); break;
+            case 'arrayBuffer': res.arrayBuffer = await response.arrayBuffer(); break;
+            case 'formData': res.formData = await response.formData(); break;
+            default: res.text = await response.text();
           }
           return res;
         }
@@ -160,10 +163,11 @@ export class OnMessage {
       e.overrideMimeType && xhr.overrideMimeType(e.overrideMimeType);
       xhr.responseType = e.responseType;
       e.timeout && (xhr.timeout = e.timeout);
-      e.hasOwnProperty('withCredentials') && (xhr.withCredentials = e.withCredentials);
-      e.headers && Object.keys(e.headers).forEach(item => xhr.setRequestHeader(item, e.headers[item]));
+      Object.hasOwn(e, 'withCredentials') && (xhr.withCredentials = e.withCredentials);
+      e.headers && Object.keys(e.headers).forEach(i => xhr.setRequestHeader(i, e.headers[i]));
       xhr.send(e.data);
 
+      /* eslint-disable @stylistic/js/no-multi-spaces */
       xhr.onload =      () => resolve(this.makeResponse(xhr, 'onload'));
       xhr.onerror =     () => resolve(this.makeResponse(xhr, 'onerror'));
       xhr.ontimeout =   () => resolve(this.makeResponse(xhr, 'ontimeout'));
@@ -172,6 +176,7 @@ export class OnMessage {
     });
   }
 
+  /* eslint-disable @stylistic/js/key-spacing */
   static makeResponse(xhr, type) {
     return {
       type,

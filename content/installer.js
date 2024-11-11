@@ -1,15 +1,15 @@
 import {App} from './app.js';
 import {Meta} from './meta.js';
-import {RemoteUpdate} from './remote-update.js'
+import {RemoteUpdate} from './remote-update.js';
 
 // ----------------- Web/Direct Installer & Remote Update (Side Effect)
 class Installer {
 
   static {
-    RemoteUpdate.callback = this.#processResponse.bind(this);
+    RemoteUpdate.callback = this.processResponse.bind(this);
 
     // --- Web/Direct Installer
-    browser.webRequest.onBeforeRequest.addListener(e => this.#webInstall(e), {
+    browser.webRequest.onBeforeRequest.addListener(e => this.webInstall(e), {
         urls: [
           'https://greasyfork.org/scripts/*.user.js',
           'https://greasyfork.org/scripts/*.user.css',
@@ -24,8 +24,8 @@ class Installer {
 
     // extraParameters not supported on Android
     App.android ?
-      browser.tabs.onUpdated.addListener((...e) => /^(http|file:)/i.test(tab.url) && this.#directInstall(...e)) :
-      browser.tabs.onUpdated.addListener((...e) => this.#directInstall(...e), {
+      browser.tabs.onUpdated.addListener((...e) => this.directInstall(...e)) :
+      browser.tabs.onUpdated.addListener((...e) => this.directInstall(...e), {
         urls: [
           '*://*/*.user.js',
           '*://*/*.user.css',
@@ -37,8 +37,7 @@ class Installer {
 
     // --- Remote Update
     this.cache = [];
-    browser.idle.onStateChanged.addListener(state => this.#onIdle(state));
-
+    browser.idle.onStateChanged.addListener(state => this.onIdle(state));
 
     // --- Stylish context-menu
     if (browser.menus) {                                    // menus not supported on Android
@@ -59,7 +58,7 @@ class Installer {
   }
 
   // ---------- Web/Direct Installer -----------------------
-  static #webInstall(e) {
+  static webInstall(e) {
     if (!e.originUrl) { return; }
 
     let q;
@@ -89,9 +88,9 @@ class Installer {
     return {cancel: true};
   }
 
-  static #directInstall(tabId, changeInfo, tab) {
+  static directInstall(tabId, changeInfo, tab) {
     if (changeInfo.status !== 'complete') { return; }
-    if (App.android && !/^(http|file:)/i.test(tab.url)) { return; }
+    if (App.android && !/^(https?|file):.+\.user\.(js|css)/i.test(tab.url)) { return; }
 
     // not on these URLs
     if (tab.url.startsWith('https://github.com/')) { return; }
@@ -114,14 +113,14 @@ class Installer {
     })();`;
 
     browser.tabs.executeScript(tabId, {code})
-    .then((result = []) => result[0] && this.#processResponse(...result[0], tab.url))
+    .then((result = []) => result[0] && this.processResponse(...result[0], tab.url))
     .catch(error => {
-      App.log('directInstall', `${tab.url} ➜ ${error.message}`, 'error');
-      this.#installConfirm(tab);
+      // App.log('directInstall', `${tab.url} ➜ ${error.message}`, 'error');
+      this.installConfirm(tab);
     });
   }
 
-  static async #installConfirm(tab) {
+  static async installConfirm(tab) {
     const text = await fetch(tab.url)
     .then(response => response.text())
     .catch(error => App.log('installConfirm fetch error', `${tab.url} ➜ ${error.message}`, 'error'));
@@ -145,7 +144,7 @@ class Installer {
 
     browser.tabs.executeScript(id, {code})
     .then((result = []) => {
-      result[0] && this.#processResponse(text, name, tab.url);
+      result[0] && this.processResponse(text, name, tab.url);
       browser.tabs.remove(id);
       browser.tabs.update(tab.id, {active: true});
     });
@@ -155,7 +154,7 @@ class Installer {
     // userstyles.org
     if (!/^https:\/\/userstyles\.org\/styles\/\d+/.test(url)) { return; }
 
-    const code = `(() => {
+    const code = String.raw`(() => {
       const name = document.querySelector('meta[property="og:title"]').content.trim();
       const description = document.querySelector('meta[name="twitter:description"]').content.trim()
           .replace(/\s*<br>\s*/g, '').replace(/\s\s+/g, ' ');
@@ -188,24 +187,24 @@ class Installer {
     .then(response => response.text())
     .then(text => {
       if (text.includes('@-moz-document')) {
-        this.#processResponse(metaData + '\n\n' + text, name, updateURL);
+        this.processResponse(metaData + '\n\n' + text, name, updateURL);
         App.notify(`${name}\nInstalled version ${version}`);
       }
       else {
         App.notify(browser.i18n.getMessage('error'));       // <head><title>504 Gateway Time-out</title></head>
       }
     })
-    .catch(error => App.log(item.name, `stylish ${updateURL} ➜ ${error.message}`, 'error'));
+    .catch(error => App.log(name, `stylish ${updateURL} ➜ ${error.message}`, 'error'));
   }
   // ---------- /Web|Direct Installer ----------------------
 
   // ---------- Remote Update ------------------------------
-  static async #onIdle(state) {
+  static async onIdle(state) {
     if (state !== 'idle') { return; }
 
     const pref = await browser.storage.local.get();
     const now = Date.now();
-    const days = pref.autoUpdateInterval *1;
+    const days = pref.autoUpdateInterval * 1;
     if (!days || now <= pref.autoUpdateLast + (days * 86400000)) { return; } // 86400 * 1000 = 24hr
 
     if (!this.cache[0]) {                                   // rebuild the cache if empty
@@ -213,13 +212,13 @@ class Installer {
     }
 
     // do 10 updates at a time & check if script wasn't deleted
-    this.cache.splice(0, 10).forEach(item => pref.hasOwnProperty(item) && RemoteUpdate.getUpdate(pref[item]));
+    this.cache.splice(0, 10).forEach(i => Object.hasOwn(pref, i) && RemoteUpdate.getUpdate(pref[i]));
 
     // set autoUpdateLast after updates are finished
     !this.cache[0] && browser.storage.local.set({autoUpdateLast: now}); // update saved pref
   }
 
-  static async #processResponse(text, name, updateURL) {            // from class RemoteUpdate.callback
+  static async processResponse(text, name, updateURL) {            // from class RemoteUpdate.callback
     const pref = await browser.storage.local.get();
     const data = Meta.get(text, pref);
     if (!data) {
@@ -251,7 +250,7 @@ class Installer {
     }
 
     // --- log message to display in Options -> Log
-    const message = pref[id] ? `Updated version ${pref[id].version} ➜ ${data.version}` : `Installed version ${data.version}`
+    const message = pref[id] ? `Updated version ${pref[id].version} ➜ ${data.version}` : `Installed version ${data.version}`;
     App.log(data.name, message, '', data.updateURL);
 
     pref[id] = data;                                        // save to pref

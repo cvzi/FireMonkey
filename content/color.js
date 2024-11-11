@@ -3,13 +3,13 @@ export class Color {
   static convertToHex(color) {
     switch (true) {
       case color.startsWith('rgb'):                         // convert rgba?() -> #rrggbb
-        return this.#rgbToHex(color);
+        return this.rgbToHex(color);
 
       case /^#\w{3}$/.test(color):                          // convert #rgb -> #rrggbb
-        return this.#hex3to6(color);
+        return this.hex3to6(color);
 
       case !color.startsWith('#'):                          // convert named -> #rrggbb
-        return this.#namedColors(color);
+        return this.namedColors(color);
 
       default:
         return color;
@@ -19,14 +19,14 @@ export class Color {
   static convertToFmColor(color, fmColor) {
     switch (true) {
       case fmColor.startsWith('rgb'):                       // convert #rrggbb -> rgba?()
-        return this.#hexToRgb(color, fmColor);
+        return this.hexToRgb(color, fmColor);
 
       case /^#\w{3}$/.test(fmColor):                        // convert #rrggbb -> #rgb
         const m = fmColor.match(/[\d.]+/g);
-        return this.#hex6to3(color, m && m[3]);
+        return this.hex6to3(color, m && m[3]);
 
       case !fmColor.startsWith('#'):
-        return this.#namedColors(color, true);              // convert #rrggbb -> named
+        return this.namedColors(color, true);              // convert #rrggbb -> named
 
       default:
         return color;
@@ -38,52 +38,52 @@ export class Color {
       case color.startsWith('rgba'):                        // convert rgba() -> #rrggbb
         const op = color.match(/[\d.]+/g)?.[3];
         op && (node.dataset.opacity = Math.round(op * 255).toString(16).padStart(2, '0'));
-        return this.#rgbToHex(color);
+        return this.rgbToHex(color);
 
       case color.startsWith('rgb'):                         // convert rgb() -> #rrggbb
-        return this.#rgbToHex(color);
+        return this.rgbToHex(color);
 
       case /^#\w{8}$/.test(color):                          // #rrggbbaa
         node.dataset.opacity = color.slice(-2);
-        return color.slice(0,-2);
+        return color.slice(0, -2);
 
       case /^#\w{4}$/.test(color):                          // convert #rgba -> #rrggbbaa
         node.dataset.opacity = color.slice(-1).repeat(2);
-        return this.#hex3to6(color.slice(0,-1));
+        return this.hex3to6(color.slice(0, -1));
 
       case /^#\w{3}$/.test(color):                          // convert #rgb -> #rrggbb
-        return this.#hex3to6(color);
+        return this.hex3to6(color);
 
       case !color.startsWith('#'):                          // convert named -> #rrggbb
-        return this.#namedColors(color);
+        return this.namedColors(color);
 
       default:
         return color;
     }
   }
 
-  static #rgbToHex(color) {
+  static rgbToHex(color) {
     const m = color.replace(/\s+/g, '').match(/rgba?\((\d+),(\d+),(\d+)/);
-    return m ? '#' + m.slice(1).map(d => (d*1).toString(16).padStart(2, 0)).join('') : color;
+    return m ? '#' + m.slice(1).map(d => (d * 1).toString(16).padStart(2, 0)).join('') : color;
   }
 
-  static #hexToRgb(color, fmColor) {
+  static hexToRgb(color, fmColor) {
     const m = color.substring(1).match(/.{2}/g).map(hex => parseInt(hex, 16));
     const op = fmColor.match(/[\d.]+/g)?.[3];
     op && m.push(op);
     return (op ? 'rgba(' : 'rgb(') + m.join(',') + ')';
   }
 
-  static #hex3to6(color) {
-    return color.split('').map(hex => hex+hex).join('').substring(1);
+  static hex3to6(color) {
+    return color.split('').map(hex => hex + hex).join('').substring(1);
   }
 
-  static #hex6to3(color) {
+  static hex6to3(color) {
     const m = color.match(/#(.)\1(.)\2(.)\3/);
     return m ? '#' + m.slice(1).join('') : color;
   }
 
-  static #namedColors(color, back) {
+  static namedColors(color, back) {
     const names = {
       'aliceblue': '#f0f8ff',
       'antiquewhite': '#faebd7',

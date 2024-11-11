@@ -49,17 +49,17 @@ export class Match {                                        // bg & popup
       case urls.includes('about:blank') && item.matchAboutBlank: // about:blank
         return true;
 
-      case gExclude[0] && this.#isMatch(urls, gExclude):     // Global Script Exclude Matches
+      case gExclude[0] && this.isMatch(urls, gExclude):     // Global Script Exclude Matches
       case !item.matches[0] && !item.includes[0] && !item.includeGlobs[0] && !styleMatches[0]: // scripts/css without matches/includes/includeGlobs/style
 
       // includes & matches & globs
-      case !item.includes[0] && !this.#isMatch(urls, [...item.matches, ...styleMatches]):
-      case item.includeGlobs[0] && !this.#isMatch(urls, item.includeGlobs, true):
-      case item.includes[0] && !this.#isMatch(urls, item.includes, false, true):
+      case !item.includes[0] && !this.isMatch(urls, [...item.matches, ...styleMatches]):
+      case item.includeGlobs[0] && !this.isMatch(urls, item.includeGlobs, true):
+      case item.includes[0] && !this.isMatch(urls, item.includes, false, true):
 
-      case item.excludeMatches[0] && this.#isMatch(urls, item.excludeMatches):
-      case item.excludeGlobs[0] && this.#isMatch(urls, item.excludeGlobs, true):
-      case item.excludes[0] && this.#isMatch(urls, item.excludes, false, true):
+      case item.excludeMatches[0] && this.isMatch(urls, item.excludeMatches):
+      case item.excludeGlobs[0] && this.isMatch(urls, item.excludeGlobs, true):
+      case item.excludes[0] && this.isMatch(urls, item.excludes, false, true):
         return false;
 
       default:
@@ -67,13 +67,13 @@ export class Match {                                        // bg & popup
     }
   }
 
-  static #isMatch(urls, arr, glob, regex) {
+  static isMatch(urls, arr, glob, regex) {
     switch (true) {
       case regex:
-        return urls.some(u => new RegExp(this.#prepareRegEx(arr), 'i').test(u));
+        return urls.some(u => new RegExp(this.prepareRegEx(arr), 'i').test(u));
 
       case glob:
-        return urls.some(u => new RegExp(this.#prepareGlob(arr), 'i').test(u));
+        return urls.some(u => new RegExp(this.prepareGlob(arr), 'i').test(u));
 
       // catch all checks
       case arr.includes('<all_urls>'):
@@ -82,33 +82,33 @@ export class Match {                                        // bg & popup
         return true;
 
       default:
-        return urls.some(u => new RegExp(this.#prepareMatch(arr), 'i').test(u));
+        return urls.some(u => new RegExp(this.prepareMatch(arr), 'i').test(u));
     }
   }
 
-  static #prepareMatch(arr) {
-    const regexSpChar = /[-\/\\^$+?.()|[\]{}]/g;            // Regular Expression Special Characters
+  static prepareMatch(arr) {
+    const regexSpChar = /[-/\\^$+?.()|[\]{}]/g;             // Regular Expression Special Characters
     return arr.map(item => '(^' +
         item.replace(regexSpChar, '\\$&')
             .replace(/^\*:/g, 'https?:')
             .replace(/\*/g, '.*')
-            .replace('/.*\\.', '/(.*\\.)?')
-            + '$)')
+            .replace('/.*\\.', '/(.*\\.)?') +
+            '$)')
             .join('|');
   }
 
-  static #prepareGlob(arr) {
-    const regexSpChar = /[-\/\\^$+.()|[\]{}]/g;             // Regular Expression Special Characters minus * ?
+  static prepareGlob(arr) {
+    const regexSpChar = /[-/\\^$+.()|[\]{}]/g;              // Regular Expression Special Characters minus * ?
     return arr.map(item => '(^' +
         item.replace(regexSpChar, '\\$&')
              .replace(/\?/g, '.')
             .replace(/^\*:/g, 'https?:')
-            .replace(/\*/g, '.*')
-            + '$)')
+            .replace(/\*/g, '.*') +
+            '$)')
             .join('|');
   }
 
-  static #prepareRegEx(arr) {
+  static prepareRegEx(arr) {
     return arr.map(item => `(${item.slice(1, -1)})`).join('|');
   }
 }

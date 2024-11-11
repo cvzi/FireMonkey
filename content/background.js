@@ -6,14 +6,14 @@ import {Script} from './script.js';
 import {Counter} from './counter.js';
 import {Migrate} from './migrate.js';
 import {OnMessage} from './api-message.js';
-import './menus.js'
+import './menus.js';
 import './installer.js';
 import './web-request.js';
 
-// ---------- User Preference ------------------------------
+// ---------- User Preferences -----------------------------
 await App.getPref();
 
-// ---------- Process Preference ---------------------------
+// ---------- Process Preferences --------------------------
 class ProcessPref {
 
   static {
@@ -87,7 +87,7 @@ class ProcessPref {
       const {oldValue, newValue} = changes[id];
 
       // if deleted, unregister
-      if(!newValue) {
+      if (!newValue) {
         Script.remove(oldValue);
       }
       // if added or relevant data changed

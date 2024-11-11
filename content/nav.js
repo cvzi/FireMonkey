@@ -16,7 +16,7 @@ export class Nav {
     switch (pram) {
       case 'newJS':
       case 'newCSS':
-        this['script'].checked = true;
+        this.script.checked = true;
         document.querySelector(`button[data-i18n^="${pram}"]`)?.click();
         break;
 

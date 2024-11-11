@@ -10,7 +10,7 @@ class Scratchpad {
     this.css = document.querySelector('#css');
     this.css.value = localStorage.getItem('scratchpadCSS') || ''; // recall last entry
 
-    document.querySelectorAll('.scratchpad button').forEach(item => item.addEventListener('click', e => this.processButtons(e)));
+    document.querySelectorAll('.scratchpad button').forEach(i => i.addEventListener('click', e => this.processButtons(e)));
   }
 
   static processButtons(e) {

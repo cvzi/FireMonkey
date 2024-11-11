@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>About</title>
-    <link href="about.css" rel="stylesheet">
+    <link href="iframe.css" rel="stylesheet">
     <script type="module" src="help.js"></script>
   </head>
   <body>
@@ -13,10 +13,18 @@
     <a href="#credits">Credits</a>
   </nav>
 
-  <article>
+  <article class="about">
 
     <h1 id="changelog">Changelog</h1>
     <dl>
+
+      <dt>2.73</dt>
+      <dd>Added <code>GM.info.isIncognito</code> & <code>GM.info.script.isIncognito</code></dd>
+      <dd>Fixed a typo error in GM getResourceUrl (#659) (from 2.68)</dd>
+      <dd>Fixed an issue with Custom Options CSS process (#293)</dd>
+      <dd>Removed openerTabId from GM openInTab on Android</dd>
+      <dd>Suppressed error logging on failure to inject installation confirmation (#601)</dd>
+      <dd>Upgraded js-beautify to 1.15.1</dd>
 
       <dt>2.72</dt>
       <dd>Added 'blob:' protocol support in relevant GM APIs</dd>
@@ -85,7 +93,6 @@
       <dd>Upgraded CodeMirror to 5.65.13</dd>
       <dd>Upgraded js-beautify to 1.14.7</dd>
       <dd>Upgraded JSHint to 2.13.6</dd>
-
 
       <dt>2.67</dt>
       <dd>Fixed Toolbar popup Dark Theme application (#428) (from 2.33)</dd>
@@ -534,7 +541,6 @@
       <dd>Upgraded Bootstrap 4 library to 4.5.3</dd>
       <dd>Upgraded Moment library to 2.29.1</dd>
 
-
       <dt>1.47</dt>
       <dd>Added more info to Log</dd>
       <dd>Fixed an issue with <code>GM_addStyle()</code></dd>
@@ -810,15 +816,16 @@
 
       <dt>Translations</dt>
       <dd><a href="https://github.com/erosman/extension-translations" target="_blank">Github Public Repository</a></dd>
-      <dd><b>bg</b>: </dd>
-      <dd><b>es</b>: </dd>
-      <dd><b>fi</b>: Pasi Lallinaho (knomepasi)</dd>
-      <dd><b>it:</b> </dd>
-      <dd><b>nl:</b> Heimen Stoffels (Vistaus)</dd>
-      <dd><b>pt_BR:</b> felipdsa21</dd>
-      <dd><b>ru:</b> vanja-san, Valeriy (Fr0stmatic)</dd>
-      <dd><b>zh_CN:</b> yfdyh000, linsui</dd>
-      <dd><b>zh_TW:</b> s8321414</dd>
+      <dd>bg: </dd>
+      <dd>de: syncmb</dd>
+      <dd>es: LucasEsposito</dd>
+      <dd>fi: Pasi Lallinaho (knomepasi)</dd>
+      <dd>it: </dd>
+      <dd>nl: Heimen Stoffels (Vistaus)</dd>
+      <dd>pt_BR: felipdsa21</dd>
+      <dd>ru: vanja-san, Valeriy (Fr0stmatic)</dd>
+      <dd>zh_CN: yfdyh000, linsui</dd>
+      <dd>zh_TW: s8321414</dd>
 
     </dl>
   </article>

@@ -12,7 +12,7 @@ export class Sync {
     // https://github.com/w3c/webextensions/issues/351
     const size = JSON.stringify(pref).length;
     if (size > 102400) {
-      const text = browser.i18n.getMessage('syncError', (size/1024).toFixed(1));
+      const text = browser.i18n.getMessage('syncError', (size / 1024).toFixed(1));
       App.notify(text);
       App.log('Sync', text, 'error');
       pref.sync = false;
@@ -30,7 +30,7 @@ export class Sync {
     const result = await browser.storage.sync.get();
     if (!Object.keys(result)[0]) { return; }
 
-    Object.keys(result).forEach(item => pref[item] = result[item]); // update pref with the saved version
+    Object.keys(result).forEach(i => pref[i] = result[i]); // update pref with the saved version
 
     const deleted = [];
     App.getIds(pref).forEach(item => {
@@ -47,7 +47,7 @@ export class Sync {
   static async apply(changes, pref) {
     if (!this.allowed(pref)) { return; }
 
-    const [keep, deleted] = this.#sortChanges(changes);
+    const [keep, deleted] = this.sortChanges(changes);
     this.noUpdate = false;
     deleted[0] && await browser.storage.local.remove(deleted); // delete scripts from storage local
     browser.storage.local.set(keep)
@@ -58,7 +58,7 @@ export class Sync {
   static set(changes, pref) {
     if (!this.allowed(pref)) { return; }
 
-    const [keep, deleted] = this.#sortChanges(changes);
+    const [keep, deleted] = this.sortChanges(changes);
     this.noUpdate = true;
     browser.storage.sync.set(keep)
     .then(() => deleted[0] && browser.storage.sync.remove(deleted)) // delete scripts from storage sync
@@ -68,7 +68,7 @@ export class Sync {
     });
   }
 
-  static #sortChanges(changes) {
+  static sortChanges(changes) {
     const keep = {};
     const deleted = [];
     Object.keys(changes).forEach(item => {

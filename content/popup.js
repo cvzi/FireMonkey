@@ -5,7 +5,7 @@ import {PSL} from './psl.js';
 import './scratchpad.js';
 import './i18n.js';
 
-// ---------- User Preference ------------------------------
+// ---------- User Preferences -----------------------------
 await App.getPref();
 
 // ---------- Popup ----------------------------------------
@@ -24,7 +24,7 @@ class Popup {
     pref.customPopupCSS && (document.querySelector('style').textContent = pref.customPopupCSS);
 
     this.docFrag = document.createDocumentFragment();
-    document.querySelectorAll('.main button').forEach(item => item.addEventListener('click', this.processButtons));
+    document.querySelectorAll('.main button').forEach(i => i.addEventListener('click', this.processButtons));
     this.process();
   }
 
@@ -57,9 +57,9 @@ class Popup {
     const [Tab, Other, frames] = await Match.process(tabs[0], pref);
     document.querySelector('h3 span.frame').textContent = frames; // display frame count
 
-    Tab.forEach(item => this.docFrag.appendChild(this.addScript(pref[item])));
+    Tab.forEach(i => this.docFrag.appendChild(this.addScript(pref[i])));
     this.ulTab.appendChild(this.docFrag);
-    Other.forEach(item => this.docFrag.appendChild(this.addScript(pref[item])));
+    Other.forEach(i => this.docFrag.appendChild(this.addScript(pref[i])));
     this.ulOther.appendChild(this.docFrag);
 
     // check commands if there are active scripts in tab & has registerMenuCommand FM 2.45
@@ -142,7 +142,7 @@ class Info {
     this.lang = navigator.language;
 
     this.docFrag = document.createDocumentFragment();
-    document.querySelectorAll('.infoList button').forEach(item => item.addEventListener('click', e => this.processButtons(e)));
+    document.querySelectorAll('.infoList button').forEach(i => i.addEventListener('click', e => this.processButtons(e)));
   }
 
   static processButtons(e) {
@@ -177,7 +177,7 @@ class Info {
     script.support = support;
     script.license = license;
     script.require = [...script.require, ...script.requireRemote]; // merge together
-    script.size = new Intl.NumberFormat().format(((script.js || script.css).length/1024).toFixed(1)) + ' KB';
+    script.size = new Intl.NumberFormat().format(((script.js || script.css).length / 1024).toFixed(1)) + ' KB';
     // script.size = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 }).format((script.js || script.css).length/1024) + ' KB';
 
     const infoArray = [
@@ -254,14 +254,14 @@ class Info {
     const url = script.updateURL;
     const meta = (script.js || script.css).match(Meta.regEx)[2];
 
-    // look for @homepage @homepageURL @website and @source
-    let homepage = meta.match(/@(homepage(URL)?|website|source)\s+(http\S+)/)?.[3];
-
     // look for @support @supportURL
-    let support = meta.match(/@support(URL)?\s+(http\S+)/)?.[2];
+    const support = meta.match(/@support(URL)?\s+(http\S+)/)?.[2];
 
     // look for @license
-    let license = meta.match(/@license\s+(.+)/)?.[1];
+    const license = meta.match(/@license\s+(.+)/)?.[1];
+
+    // look for @homepage @homepageURL @website and @source
+    let homepage = meta.match(/@(homepage(URL)?|website|source)\s+(http\S+)/)?.[3];
 
     // make homepage from updateURL
     switch (true) {
@@ -316,7 +316,7 @@ class Info {
   // ---------- Script Commands ----------------------------
   static getMenuCommand(Tab, tabId) {
     // --- check commands if there are active scripts in tab & has registerMenuCommand v2.45
-    if(Tab.some(item => pref[item].enabled &&
+    if (Tab.some(item => pref[item].enabled &&
       ['GM_registerMenuCommand', 'GM.registerMenuCommand'].some(i => pref[item].grant?.includes(i)))) {
       browser.runtime.onMessage.addListener((message, sender) =>
         sender.tab.id === tabId && this.addCommand(tabId, message));

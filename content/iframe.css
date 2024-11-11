@@ -1,56 +1,35 @@
 @import 'default.css';
 
 /* ----- Dark Theme ----- */
-:root, body.dark {
+:root,
+body.dark {
   --border: #444;
-
-  --dim: #ccc;
-  --nav: #444;
-  --shadow: #fff8;
-  --h2: #0cf;
+  --h1: #0cf;
   --dt: #abc;
-  --dt-bg: #555;
   --pre: #cdf;
-  --table: #345;
-  --table1: #678;
-  --table3: #567;
-  --table5: #456;
-  --table-border: #678;
   --quote: #400;
-  --note: #335;
-  --warn: #422;
   --pass: #0c0;
-  --img-filter: invert(1) grayscale(1);
+  --th: #333;
+  --td: #444;
 }
 
 /* ----- Light Theme ----- */
 @media screen and (prefers-color-scheme: light) {
   :root {
     --border: #ddd;
-
-    --dim: #777;
-    --nav: #fff;
-    --shadow: #0004;
-    --h2: #066;
-    --dt: #567;
-    --dt-bg: #eee;
-    --pre: #48b1;
-    --table: #abc;
-    --table1: #abc1;
-    --table3: #abc3;
-    --table5: #abc5;
-    --table-border: #fff;
-    --quote: #fed8;
-    --warn: #fee;
-    --note: #17f1;
+    --h1: #066;
+    --dt: #345;
+    --pre: #f2f1f1;
+    --quote: #f4f6fa;
     --pass: #080;
-    --img-filter: none;
+    --th: #f7f7fb;
+    --td: #fbfbfd;
   }
 }
 
 /* ----- General ----- */
 html {
-  scroll-padding-top: 2.5em; /* FF68 */
+  scroll-padding-top: 2.5em;
 }
 
 body {
@@ -58,7 +37,7 @@ body {
 }
 
 img {
-  vertical-align: text-bottom;
+  vertical-align: text-top;
 }
 
 img[src$=".svg"]:not([src$="js.svg"]):not([src$="css.svg"]) {
@@ -69,27 +48,29 @@ article {
   padding: 0.5em;
 }
 
-article > *:not(h2):not(h3) {
-  margin-left: 2rem;
+h1, h2 {
+  font-weight: normal;
 }
 
-h1, h2, h3, h4 {
-  letter-spacing: 0.5px;
+h1 {
+  color: var(--h1);
+  font-size: 2.5em;
+  border-bottom: 1px solid var(--border);
 }
 
-article > h2 {
-  color: var(--h2);
+h2 {
+  font-size: 2em;
 }
 
-h4 {
-  margin-bottom: 0;
+:not(h1) + h2 {
+  margin-top: 1.5em;
 }
 
-h2 img, h3 img, h4 img {
+h1 img, h2 img, h3 img {
   width: 1em;
 }
 
-h3 span, h4 span {
+h2 span, h3 span {
   color: var(--dim);
   font-size: 0.8em;
   font-style: italic;
@@ -97,22 +78,28 @@ h3 span, h4 span {
   margin-left: 0.5em;
 }
 
-h3 i {
-  color: var(--dim);
-}
-
-h4 sup {
+h3 sup {
   background-color: #cd853f;
   color: #fff;
   padding: 0.1em 0.4em;
 }
 
+strong {
+  color: #905;
+}
+
 dt {
   color: var(--dt);
-  background-color: var(--dt-bg);
-  font-weight: bold;
+  background-color: var(--code);
   display: table;
   padding: 0.2em 0.5em;
+  margin-bottom: 0.2em;
+}
+
+dl.plain dt {
+  color: var(--color);
+  background-color: unset;
+  font-weight: bold;
 }
 
 dd + dt {
@@ -120,7 +107,7 @@ dd + dt {
 }
 
 dd > dl {
-  margin: 1em auto;
+  margin-top: 0.5em;
 }
 
 dt img, dd img {
@@ -139,36 +126,9 @@ dd sup, p sup {
   color: #05f;
 }
 
-del {
-  text-decoration: line-through wavy #f50;
+s {
+  text-decoration: line-through solid var(--highlight);
 }
-
-/* ----- About ----- */
-.about dl {
-  margin-left: initial;
-}
-
-.about dt {
-  color: #fff;
-  background-color: var(--table);
-  padding: 0.2em 0.5em;
-  position: relative;
-  border-radius: 1em;
-  min-width: 3em;
-  text-align: center;
-}
-
-.about dt::before {
-  background-color: var(--table);
-  content: '';
-  height: 2px;
-  width: 20vw;
-  position: absolute;
-  bottom: 0;
-  left: 1em;
-}
-/* ----- /About ----- */
-
 
 article li::marker { /* FF68 */
   color: var(--dim);
@@ -178,45 +138,87 @@ article li img {
   max-width: 70vw;
 }
 
+div.grid-2 {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  column-gap: 1em;
+  row-gap: 1em;
+}
+
 a[href^="http"]::after {
   content: '🔗';
   margin-left: 0.3em;
   font-size: 0.7em;
 }
 
-a[href^="https://bugzilla.mozilla.org/show_bug.cgi?id="]::before {
-  content: '🐞';
-  margin-right: 0.3em;
-}
-
-a[href^="https://github.com/"]::before,
+/* dino.svg */
 a[href^="https://addons.mozilla.org/"]::before,
+a[href^="https://extensionworkshop.com/"]::before,
+a[href^="https://support.mozilla.org/"]::before,
+/* moz.svg */
 a[href^="https://blog.mozilla.org/"]::before,
 a[href^="https://developer.mozilla.org/"]::before,
-a[href^="https://support.mozilla.org/"]::before,
 a[href^="https://www.mozilla.org/"]::before,
-a[href^="https://extensionworkshop.com/"]::before {
+/* mix */
+a[href^="https://bugzilla.mozilla.org/show_bug.cgi?id="]::before,
+a[href^="https://codemirror.net/"]::before,
+a[href^="https://developer.chrome.com/"]::before,
+a[href^="https://github.com/"]::before,
+a[href*=".github.io/"]::before {
   content: '';
-  background: url('../image/dino.svg') no-repeat center / contain;
+  background: url('../image/logo/dino.svg') no-repeat center / contain;
   display: inline-block;
-  height: 1.1em;
-  width: 1.1em;
+  height: 0.9em;
+  width: 0.9em;
   margin-right: 0.3em;
-  vertical-align: text-bottom;
+  /* vertical-align: text-bottom; */
   filter: var(--img-filter);
 }
 
-a[href^="https://blog.mozilla.org/"]::before {
-  background-image: url('../image/moz.svg');
+a[href^="https://blog.mozilla.org/"]::before,
+a[href^="https://developer.mozilla.org/"]::before,
+a[href^="https://www.mozilla.org/"]::before {
+  background-image: url('../image/logo/moz.svg');
   border-radius: 1em;
 }
 
-a[href^="https://github.com/"]::before {
-  background-image: url('../image/github.svg');
+a[href^="https://bugzilla.mozilla.org/show_bug.cgi?id="]::before {
+  background-image: url('../image/logo/bugzilla.png');
 }
 
+a[href^="https://github.com/"]::before,
+a[href*=".github.io/"]::before {
+  background-image: url('../image/logo/github.svg');
+}
+
+a[href^="https://codemirror.net/"]::before {
+  background-image: url('../image/logo/codemirror.svg');
+}
+
+a[href^="https://developer.chrome.com/"]::before {
+  background-image: url('../image/logo/chrome.svg');
+}
+
+/* ----- About ----- */
+.about dt {
+  color: var(--dt);
+  background: unset;
+  font-weight: bold;
+  display: table;
+  padding: 0.2em 0.5em;
+  margin-bottom: 0.2em;
+  font-size: 1.1em;
+  border-bottom: 1px solid var(--border);
+  min-width: 15vw;
+}
+
+.about dd + dt {
+  margin-top: 0.5em;
+}
+/* ----- /About ----- */
+
 /* ----- Navigation ----- */
-nav  {
+nav {
   background-color: var(--nav);
   position: sticky;
   top: 0;
@@ -237,11 +239,11 @@ nav > a, nav div {
 }
 
 nav > a:hover, nav div:hover {
-  border-top-color: #f84;
+  border-top-color: var(--highlight);
 }
 
 nav a {
-  color: var(--h2);
+  color: var(--h1);
   display: inline-block;
   padding: 0.3em 0.5em;
   text-align: center;
@@ -276,18 +278,18 @@ nav ul::after {
 }
 
 nav li {
-  padding: 0.2em 0.5em;
   white-space: nowrap;
   position: relative;
 }
 
+
 nav li.arrow::after {
-  content: '\203a';
+  content: '›';
   position: absolute;
   right: 0.5em;
   top: 0;
   font-size: 1.5em;
-  color: var(--h2);
+  color: var(--h1);
   opacity: 0.5;
   font-weight: bold;
 }
@@ -323,21 +325,15 @@ nav li:hover ul {
 }
 
 @keyframes fade {
-  0%    { opacity: 0; }
-  100%  { opacity: 1; }
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
 }
 /* ----- /Navigation ----- */
-
-strong {
-  color: #905;
-}
-
 
 /* ----- Pre/figure ----- */
 pre {
   color: #000;
   background-color: var(--pre);
-  border-left: 4px solid #48b;
   padding: 1em;
   font-size: 1.2em;
 }
@@ -348,11 +344,11 @@ pre code {
   padding: 1em;
   background-color: #f5fffa;
   position: relative;
-  margin: auto -1em;
+  /* margin: auto -1em; */
 }
 
 pre code::after {
-  content: '\2714';
+  content: '✔';
   color: #080;
   opacity: 0.6;
   font-size: 2em;
@@ -366,37 +362,14 @@ pre code.deprecated {
 }
 
 pre code.deprecated::after {
-  content: '\2718';
+  content: '✘';
   color: #f00;
 }
 
-pre.error {
+.error {
   color: #800;
   background-color: #fff5f5;
-  border-left-color: #800;
   display: table;
-}
-
-precaption {
-  color: #fff;
-  background-color: #48b;
-  padding: 0.3em 0.5em;
-  font-weight: bold;
-  font-size: 0.9em;
-  display: table;
-  min-width: 25em;
-  clip-path: polygon(0 0, 90% 0, 100% 100%, 0 100%);
-}
-
-precaption + pre {
-  margin-top: 0;
-}
-
-precaption span {
-  margin-left: 0.5em;
-  color: #eee;
-  font-style: italic;
-  font-weight: normal;
 }
 
 .scroll {
@@ -410,33 +383,11 @@ q {
 }
 
 blockquote {
-  color: var(--color);
-  padding: 0.5em 3.5em 1em;
-  font-style: italic;
-  position: relative;
-  font-size: 0.9em;
   background-color: var(--quote);
+  font-size: 0.9em;
+  font-style: italic;
+  padding: 0.5em 3.5em 1em;
   mask: url('../image/blob.svg') 0 0/100% 100%;
-}
-
-blockquote::before,
-blockquote::after {
-  color: #e9967a;
-  opacity: 0.6;
-  font-size: 4em;
-  position: absolute;
-}
-
-blockquote::before {
-  content: '\201c';
-  top: 0;
-  left: 0.3em;
-}
-
-blockquote::after {
-  content: '\201d';
-  bottom: -0.5em;
-  right: 0.5em;
 }
 
 td blockquote {
@@ -446,23 +397,17 @@ td blockquote {
 cite {
   display: block;
   margin-top: 1em;
-  color: #999;
+  color: var(--dim);
 }
 
 cite::before {
-  content: '\2014\00A0source: ';
+  content: '— source: ';
 }
-
-code {
-  font-size: 1.2em;
-  padding: 0 0.3em;
-  background-color: var(--dt-bg);
-}
-
 
 kbd {
   color: #333;
   padding: 0.1em 0.4em;
+  margin: auto 0.2em;
   background: transparent linear-gradient(to bottom, #eee, #fff 60%);
   border-radius: 4px;
   border: 1px solid #ccc;
@@ -472,25 +417,20 @@ kbd {
 }
 
 
-.note, .footnote, .warning  {
-  color: var(--color);
-  background-color: var(--note);
-  border: 1px solid var(--border);
-  border-left: 4px solid #17f;
-  padding: 0.5em;
+/* ----- note, footnote, warning, experimental ----- */
+.note, .footnote, .warning {
+  border-left: 3px solid #17f;
+  padding: 0.3em 0.5em 0.3em 2em;
   margin-top: 0.5em;
-  border-radius: 4px;
-  display: table;
-  padding-left: 2em;
   position: relative;
 }
 
 .note::before, .footnote::before, .warning::before {
-  content: '\1f4cc';
-  /*margin-right: 0.5em;*/
+  content: 'ⓘ';
+  color: #17f;
   position: absolute;
-  top: 0.5em;
-  left: 0.8em;
+  top: 0;
+  left: 0.5em;
 }
 
 .footnote {
@@ -499,54 +439,64 @@ kbd {
 }
 
 .warning {
-  border-left-color: #d40;
-  background-color: var(--warn);
+  border-left-color: #f30;
 }
 
 .warning::before {
-  content: '\26a0\fe0f';
-  /*margin-right: 0.3em;*/
+  content: '⚠️';
 }
 
 .experimental::after {
   content: '';
   background: url('../image/beaker.svg') no-repeat center / contain;
   display: inline-block;
-  width: 1.2em;
-  height: 1.2em;
+  width: 1em;
+  height: 1em;
   margin-left: 0.5em;
   vertical-align: text-bottom;
 }
 
 /* ----- Table ----- */
+caption, .caption {
+  padding: 0.5em 0;
+  font-weight: bold;
+  text-align: left;
+  letter-spacing: 0.2em;
+}
+
+.caption {
+  margin-bottom: 0;
+}
+
+.caption + pre {
+  margin-top: 0;
+}
+
+.caption span {
+  margin-left: 0.5em;
+  color: var(--dim);
+  font-style: italic;
+  font-weight: normal;
+  letter-spacing: normal;
+}
+
+table, th, td {
+  border: 1px solid var(--border);
+}
+
 table {
   border-collapse: collapse;
-  border: 1px solid var(--border);
   margin-bottom: 1em;
   min-width: 70%;
 }
 
-caption {
-  color: #fff;
-  background-color: var(--table);
-  padding: 0.3em 0.5em;
-  font-weight: bold;
-  font-size: 0.9em;
-  text-align: left;
-  width: 25em;
-  clip-path: polygon(0 0, 90% 0, 100% 100%, 0 100%);
-}
-
-caption ~ thead, caption ~ tbody {
-  border-left: 4px solid var(--table);
-}
-
-thead {
-  border-top: 1px solid var(--table);
+ul + table,
+dl + table {
+  margin-top: 1em;
 }
 
 th {
-  background-color: var(--table5);
+  background-color: var(--th);
   text-align: left;
   padding: 0.5em;
 }
@@ -556,16 +506,23 @@ tbody th {
   min-width: 10em;
 }
 
-thead tr, tbody tr:not(:last-of-type) {
-  border-bottom: 1px solid var(--table-border);
+th span, .small {
+  color: var(--dim);
+  font-style: italic;
+  font-weight: normal;
+  font-size: 0.9em;
 }
 
-tr:nth-child(odd) td {
-  background-color: var(--table1);
+th sup {
+  color: var(--dim);
+}
+
+th img {
+  width: 1em;
 }
 
 tr:nth-child(even) td {
-  background-color: var(--table3);
+  background-color: var(--td);
 }
 
 td {
@@ -574,23 +531,18 @@ td {
 
 td p {
   margin: 0;
+  display: block !important;
 }
 
-td code {
-  background-color: transparent;
-  padding: 0;
-  font-size: 1.2em;
-  white-space: pre;
-}
-
-.code td {
+.code td,
+td.code {
   font-family: monospace;
   font-size: 1.2em;
   white-space: pre;
 }
 
-td .pass, td .fail,
-td.pass span, td.fail span {
+td .pass,
+td .fail {
  font-family: monospace;
  font-size: initial;
 }
@@ -599,46 +551,33 @@ td.top {
   vertical-align: top;
 }
 
-th span, .small {
-  color: var(--dim);
-  font-style: italic;
-  font-weight: normal;
-  font-size: 0.9em;
-}
-
 code.small {
   font-size: initial;
 }
 
-th sup {
-  color: var(--dim);
-}
-
-.slim th:first-of-type, .slim td {
-  padding: 0 0.5em;
+.slim th:first-of-type,
+.slim td {
+  padding: 0.2em 0.5em;
 }
 
 .pass {
   color: var(--pass);
 }
 
-.pass::before {
-  content: '\2714\00A0';
-  font-weight: 900;
-}
-
 .fail {
   color: #f00;
 }
 
+.pass::before {
+  content: '✔ ';
+}
+
 .fail::before {
-  content: '\2718\00A0';
-  font-weight: 900;
+  content: '✘ ';
 }
 
 .unknown::before {
-  content: '\2753\00A0';
-  font-weight: 900;
+  content: '❓ ';
 }
 
 .dim {

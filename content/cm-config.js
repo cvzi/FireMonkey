@@ -1,4 +1,5 @@
 // ---------- CodeMirror Extra Config (Side Effect) --------
+/* global CodeMirror */
 class Config {
 
   static {
@@ -10,10 +11,9 @@ class Config {
     // add to window global for lint & hint fm-javascript.js
     window.GM = {
       getValue: {}, setValue: {}, deleteValue: {}, listValues: {},
-      getValues: {}, setValues: {}, deleteValues: {},
       addValueChangeListener: {}, removeValueChangeListener: {},
 
-      addElement: {}, addScript: {}, addStyle: {},   download: {},
+      addElement: {}, addScript: {}, addStyle: {}, download: {},
       getResourceText: {}, getResourceURL: {}, getResourceUrl: {}, info: {}, log: {},
       notification: {}, openInTab: {}, popup: {},
       registerMenuCommand: {}, unregisterMenuCommand: {}, setClipboard: {},
@@ -22,7 +22,6 @@ class Config {
 
     const gm = [
       'GM_getValue', 'GM_setValue', 'GM_deleteValue', 'GM_listValues',
-      'GM_getValues', 'GM_setValues', 'GM_deleteValues',
       'GM_addValueChangeListener', 'GM_removeValueChangeListener',
 
       'GM_addElement', 'GM_addScript', 'GM_addStyle', 'GM_download',
@@ -52,12 +51,12 @@ class Config {
   static lint(cm, annotationsNotSorted) {
     const text = cm.getValue();
     const js = cm.options.mode === 'javascript';
-    const meta = text.match(/^([\s\S]+)==(UserScript|UserCSS|UserStyle)==([\s\S]+)==\/\2==/i) || ['','','',''];
+    const meta = text.match(/^([\s\S]+)==(UserScript|UserCSS|UserStyle)==([\s\S]+)==\/\2==/i) || ['', '', '', ''];
     const b4 = meta[1].split(/\r?\n/).length;
     const end = b4 + meta[3].split(/\r?\n/).length;
 
     // ------------- Lint Filter ---------------------------
-    const idx =[];                                          // delete index cache
+    const idx = [];                                         // delete index cache
     annotationsNotSorted.forEach((item, index) => {
       const {line, ch} = item.from;
 
@@ -75,7 +74,7 @@ class Config {
 
         // suppress JSHint ES6 Unicode code point escapes \u{*****} error
         case js && item.message.startsWith("Unexpected 'u{") &&
-                /^\\u\{[0-9a-f]+\}/.test(cm.getLine(line).substring(ch-1)):
+                /^\\u\{[0-9a-f]+\}/.test(cm.getLine(line).substring(ch - 1)):
           idx.push(index);
           break;
 
@@ -87,7 +86,7 @@ class Config {
 
         // custom 'var' message
         case js && item.message === '`var` declarations are forbidden. Use `let` or `const` instead.':
-          item.message = 'Since ECMAScript 6 (2015), `let` & `const` are recommended over `var`.'
+          item.message = 'Since ECMAScript 6 (2015), `let` & `const` are recommended over `var`.';
           item.severity = 'info';
           break;
       }
@@ -110,13 +109,13 @@ class Config {
     const sticky = null;
 
     meta[3].split(/\r?\n/).forEach((item, index) => {       // lines
-      let [,com, prop, value] = item.match(/^\s*(\/\/)?\s*(\S+)(?:\s*)(.*)/) || [];
+      let [, com, prop, value] = item.match(/^\s*(\/\/)?\s*(\S+)(?:\s*)(.*)/) || [];
       if (!prop) { return; }                                // continue to next
 
       value = value.trim();
       let message;
       let severity = 'info';
-      const line = b4 + index -1;
+      const line = b4 + index - 1;
       let ch = item.indexOf(prop);
       const propLC = prop.toLowerCase();
 
@@ -226,7 +225,7 @@ class Config {
     lint.forEach(item => {
       const li = liTemp.cloneNode();
       li.className = 'CodeMirror-lint-message-' + item.severity;
-      li.dataset.line = nf.format(item.from.line +1);
+      li.dataset.line = nf.format(item.from.line + 1);
       li.textContent = item.message;
       li.addEventListener('click', () => cm.setCursor(item.from.line, item.from.ch));
       docFrag.appendChild(li);

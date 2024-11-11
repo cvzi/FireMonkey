@@ -1,15 +1,22 @@
 browser.userScripts.onBeforeScript.addListener(script => {
   // --- globals
-  const {grantRemove, registerMenuCommand, remoteCSS, resourceData, info} = script.metadata;
-  const {name, id = `_${name}`, injectInto, resource} = info.script; // set id as _name
+  const {grantRemove, registerMenuCommand, remoteCSS, resourceData, FMUrl, info} = script.metadata;
+  const {name, id = `_${name}`, injectInto, resources} = info.script; // set id as _name
   let {storage} = script.metadata;                          // storage at the time of registration
   const valueChange = {};
   const scriptCommand = {};
-  const FMUrl = browser.runtime.getURL('');                 // used for sourceURL & import
+  // const FMUrl = browser.runtime.getURL('');                 // used for sourceURL & import
+
+  // --- add isIncognito to GM info
+  if (browser.extension.inIncognitoContext) {
+    info.isIncognito = true;
+    info.script.isIncognito = true;
+  }
 
   // --- check @require CSS
   remoteCSS.forEach(item => GM.addElement('link', {href: item, rel: 'stylesheet'}));
 
+  // --- GM popup CSS
   const popupCSS =
 `:host, *, ::before, ::after {
   box-sizing: border-box;
@@ -133,12 +140,12 @@ browser.userScripts.onBeforeScript.addListener(script => {
       // Script Command registerMenuCommand
       registerMenuCommand && browser.runtime.onMessage.addListener(message => {
         switch (true) {
-          case message.hasOwnProperty('listCommand'):       // to popup.js
+          case Object.hasOwn(message, 'listCommand'):       // to popup.js
             const command = Object.keys(scriptCommand);
             command[0] && browser.runtime.sendMessage({name, command});
             break;
 
-          case message.name === name && message.hasOwnProperty('command'): // from popup.js
+          case message.name === name && Object.hasOwn(message, 'command'): // from popup.js
             (scriptCommand[message.command])();
             break;
         }
@@ -183,16 +190,16 @@ browser.userScripts.onBeforeScript.addListener(script => {
           break;
 
         case typeof key === 'string':
-          obj = thisStorage.hasOwnProperty(key) ? thisStorage[key] : defaultValue;
+          obj = Object.hasOwn(thisStorage, key) ? thisStorage[key] : defaultValue;
           break;
 
         case Array.isArray(key):
-          key.forEach(item => obj[item] = thisStorage[item]);
+          key.forEach(i => obj[i] = thisStorage[i]);
           break;
 
         default:
           Object.entries(key).forEach(([item, def]) =>
-            obj[item] = thisStorage.hasOwnProperty(item) ? thisStorage[item] : def);
+            obj[item] = Object.hasOwn(thisStorage, item) ? thisStorage[item] : def);
       }
 
       return API.prepare(obj);                              // object or string
@@ -213,7 +220,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
 
     // --- sync return GM_getResourceURL
     static getResourceUrl(resourceName) {
-      return resource[resourceName];
+      return resources[resourceName];
     }
 
     // --- prepare return value, check if it is primitive value
@@ -234,6 +241,13 @@ browser.userScripts.onBeforeScript.addListener(script => {
     // --- cloneInto wrapper for object methods
     static cloneIntoBridge(obj, target, options = {}) {
       return cloneInto(options.cloneFunctions ? obj.wrappedJSObject : obj, target, options);
+    }
+
+    // --- inject into page context
+    static injectIntoPage(str) {
+      str = `((unsafeWindow, GM, GM_info = GM.info) => {(() => { ${str}
+})();})(window, ${JSON.stringify({info})});`;
+      GM.addScript(str);
     }
 
     // --- log from background
@@ -321,7 +335,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
         const cb = object.wrappedJSObject[name];
         typeof cb === 'function' && cb(...args);
       }
-      catch(error) {
+      catch (error) {
         API.log(`userScriptCallback ➜ ${error.message}`);
       }
     }
@@ -363,7 +377,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
       const arr = Array.isArray(key) ? key : [key];         // change to array
 
       // update sync storage
-      arr.forEach(item => delete storage[item]);
+      arr.forEach(i => delete storage[i]);
 
       // update async storage
       return browser.runtime.sendMessage({
@@ -452,7 +466,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
 
     async fetch(url, init = {}) {
       // check url
-      url = url && API.checkURL(url);
+      url &&= API.checkURL(url);
       if (!url) { return; }
 
       const data = {
@@ -462,7 +476,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
 
       ['method', 'headers', 'body', 'mode', 'credentials', 'cache', 'redirect',
         'referrer', 'referrerPolicy', 'integrity', 'keepalive', 'signal',
-        'responseType'].forEach(item => init.hasOwnProperty(item) && (data.init[item] = init[item]));
+        'responseType'].forEach(item => Object.hasOwn(init, item) && (data.init[item] = init[item]));
 
       // exclude credentials in request, ignore credentials sent back in response (e.g. Set-Cookie header)
       init.anonymous && (data.init.credentials = 'omit');
@@ -497,7 +511,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
 
       // not processing withCredentials as it has no effect from bg script
       ['method', 'headers', 'data', 'overrideMimeType', 'user', 'password', 'timeout',
-        'responseType'].forEach(item => init.hasOwnProperty(item) && (data[item] = init[item]));
+        'responseType'].forEach(i => Object.hasOwn(init, i) && (data[i] = init[i]));
 
       API.prepareInit(data);
 
@@ -513,8 +527,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
       const type = response.type;
       delete response.type;
       // convert text responseXML to XML DocumentFragment
-      response.responseXML &&
-        (response.responseXML = document.createRange().createContextualFragment(response.responseXML.trim()));
+      response.responseXML &&= document.createRange().createContextualFragment(response.responseXML.trim());
       API.userScriptCallback(init, type,
          typeof response.response === 'string' ? script.export(response) : cloneInto(response, window));
     },
@@ -558,7 +571,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
       Object.entries(attributes)?.forEach(([key, value]) =>
         key === 'textContent' ? elem.append(value) : elem.setAttribute(key, value));
 
-
+      // script only
       if (script && attributes.textContent && injectInto !== 'page') {
         elem.textContent +=
           `\n\n//# sourceURL=${FMUrl}userscript/${encodeURI(name)}/inject-into-page/${Math.random().toString(36).substring(2)}.js`;
@@ -570,7 +583,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
         // userscript may record UUID in element's textContent
         return script ? undefined : elem;
       }
-      catch(error) { API.log(`addElement ➜ ${tagName} ${error.message}`); }
+      catch (error) { API.log(`addElement ➜ ${tagName} ${error.message}`); }
     },
 
     popup({type = 'center', modal = true} = {}) {
@@ -651,7 +664,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
 
     // --- async Promise return GM.getResourceUrl
     async getResourceUrl(resourceName) {
-      return resource[resourceName];
+      return resources[resourceName];
     },
 
     registerMenuCommand(text, onclick, accessKey) {
@@ -663,12 +676,14 @@ browser.userScripts.onBeforeScript.addListener(script => {
     },
 
     log(...text) {
+      // eslint-disable-next-line no-console
       console.log(`${name}:`, ...text);
     },
 
     info,
   };
 
+  /* eslint-disable @stylistic/js/key-spacing */
   const globals = {
     GM,
 
@@ -711,6 +726,7 @@ browser.userScripts.onBeforeScript.addListener(script => {
     matchURL:                     API.matchURL,
     setStorage:                   API.setStorage,
     importBridge:                 API.importBridge,
+    injectIntoPage:               API.injectIntoPage,
   };
 
   // auto-disable sync GM API if async GM API are granted

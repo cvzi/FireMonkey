@@ -4,7 +4,7 @@ import {App} from './app.js';
 export class Meta {                                         // bg, options
 
   static regEx = /==(UserScript|UserCSS|UserStyle)==([\s\S]+?)==\/\1==/i;
-  static lineRegex = /^[\s\/]*@([\w:-]+)(?:\s+(.+))?/;
+  static lineRegex = /^[\s/]*@([\w:-]+)(?:\s+(.+))?/;
 
   static get(str, pref) {
     // --- get all
@@ -64,20 +64,20 @@ export class Meta {                                         // bg, options
     };
 
     // convert @var select multiline to single line
-    let mData = metaData[2].replace(/(@var\s+select\s+[^\n]+)(\{[^}]+\})/g, this.#prepareSelect);
+    let mData = metaData[2].replace(/(@var\s+select\s+[^\n]+)(\{[^}]+\})/g, this.prepareSelect);
 
     // convert @advanced dropdown to select
-    mData = mData.replace(/(@advanced\s+dropdown\s+[^\n]+)(\{[^}]+\})/g, this.#prepareDropdown);
+    mData = mData.replace(/(@advanced\s+dropdown\s+[^\n]+)(\{[^}]+\})/g, this.prepareDropdown);
 
     // convert @advanced image to select
-    mData = mData.replace(/(@advanced\s+image\s+[^\n]+)(\{[^}]+\})/g, this.#prepareImage);
+    mData = mData.replace(/(@advanced\s+image\s+[^\n]+)(\{[^}]+\})/g, this.prepareImage);
 
     // --- disallowed properties
-    const disallowed =  ['autoUpdate', 'css', 'enabled', 'error', 'i18n', 'js',
+    const disallowed = ['autoUpdate', 'css', 'enabled', 'error', 'i18n', 'js',
       'requireRemote', 'storage', 'style', 'userMeta', 'userMeta', 'userVar'];
 
     mData.split(/[\r\n]+/).forEach(item => {                // lines
-      let [,prop, value = ''] = item.trim().match(this.lineRegex) || [];
+      let [, prop, value = ''] = item.trim().match(this.lineRegex) || [];
       if (!prop) { return; }                                // continue to next
       if (disallowed.includes(prop)) { return; }
 
@@ -101,7 +101,6 @@ export class Meta {                                         // bg, options
         case 'includeGlob': prop = 'includeGlobs'; break;
         case 'excludeGlob': prop = 'excludeGlobs'; break;
         case 'antifeature': prop = 'antifeatures'; break;
-
 
         case 'container':
           if (!/default|private|container-\d+/i.test(value)) { return; }
@@ -129,13 +128,13 @@ export class Meta {                                         // bg, options
           break;
 
         case 'inject-into':                                 // only for js
-          if(!js || value !== 'page') { return; }
+          if (!js || value !== 'page') { return; }
           prop = 'injectInto';
           break;
 
         case 'resource':
           const [resName, resURL] = value.split(/\s+/);
-          if(resName && resURL) { data.resource[resName] = resURL; }
+          if (resName && resURL) { data.resource[resName] = resURL; }
           return;
 
         // --- var
@@ -148,7 +147,7 @@ export class Meta {                                         // bg, options
           const [, type, name, label, valueString] = value.match(/^(\S+)\s+(\S+)+\s+('[^']+'|"[^"]+"|\S+)\s+(.+)$/) || [];
           if (!type || !valueString.trim()) { return; }
 
-          const [user, val] = this.#getValue(type, valueString);
+          const [user, val] = this.getValue(type, valueString);
           if (typeof user === 'undefined') { return; }
 
           data.userVar[name] = {
@@ -156,7 +155,7 @@ export class Meta {                                         // bg, options
             label: label.replace(/^('|")(.+)(\1)$/, '$2'),
             value: val,
             user,
-          }
+          };
           return;
 
         // --- add @require
@@ -184,11 +183,11 @@ export class Meta {                                         // bg, options
       }
 
       // set prop & value
-      if (data.hasOwnProperty(prop) && value !== '') {
+      if (Object.hasOwn(data, prop) && value !== '') {
         switch (typeof data[prop]) {
-          case 'string':  data[prop] = value; break;
+          case 'string': data[prop] = value; break;
           case 'boolean': data[prop] = value === 'true'; break;
-          case 'object':  data[prop].push(value); break;
+          case 'object': data[prop].push(value); break;
         }
       }
     });
@@ -199,17 +198,17 @@ export class Meta {                                         // bg, options
     }
 
     // --- process UserStyle
-    userStyle && this.#processStyle(data, str);
+    userStyle && this.processStyle(data, str);
 
     // ------------- update from previous version ----------
     const id = `_${data.name}`;
     if (pref[id]) {
-      ['enabled', 'autoUpdate', 'userMeta', 'storage'].forEach(item => data[item] = pref[id][item]);
+      ['enabled', 'autoUpdate', 'userMeta', 'storage'].forEach(i => data[i] = pref[id][i]);
       !data.updateURL && (data.updateURL = pref[id].updateURL);
 
       // --- userVar
       Object.keys(data.userVar).forEach(item =>
-        pref[id].userVar?.[item]?.hasOwnProperty('usr') && (data.userVar[item].usr = pref[id].userVar[item].usr));
+        Object.hasOwn(pref[id].userVar?.[item] || {}, 'usr') && (data.userVar[item].usr = pref[id].userVar[item].usr));
     }
 
     // this.enable etc are defined in options.js but not from background.js
@@ -224,7 +223,7 @@ export class Meta {                                         // bg, options
         if (!data.userVar[id] || !item.value.trim()) { return; } // skip
 
         // number | string
-        let val = item.type === 'checkbox' ? item.checked*1 : Number.isNaN(item.value*1) ? item.value : item.value*1;
+        let val = item.type === 'checkbox' ? item.checked * 1 : Number.isNaN(item.value * 1) ? item.value : item.value * 1;
 
         // color may have opacity
         item.dataset.opacity && (val += item.dataset.opacity);
@@ -233,13 +232,13 @@ export class Meta {                                         // bg, options
     }
 
     // --- User Metadata
-    data.userMeta && this.#processUserMeta(data, js);
+    data.userMeta && this.processUserMeta(data, js);
 
     // --- auto-convert include/exclude rules
     [data.includes, data.matches, data.includeGlobs] =
-      this.#convert(data.includes, data.matches, data.includeGlobs, js);
+      this.convert(data.includes, data.matches, data.includeGlobs, js);
     [data.excludes, data.excludeMatches, data.excludeGlobs] =
-      this.#convert(data.excludes, data.excludeMatches, data.excludeGlobs, js);
+      this.convert(data.excludes, data.excludeMatches, data.excludeGlobs, js);
 
     // move matches to includeGlobs due to API matching order
     if (data.includeGlobs[0]) {
@@ -249,8 +248,8 @@ export class Meta {                                         // bg, options
     }
 
     // --- check for overlap rules
-    data.matches = this.#checkOverlap(data.matches);
-    data.excludeMatches = this.#checkOverlap(data.excludeMatches);
+    data.matches = this.checkOverlap(data.matches);
+    data.excludeMatches = this.checkOverlap(data.excludeMatches);
 
     // --- remove duplicates
     Object.keys(data).forEach(i => Array.isArray(data[i]) && data[i].length > 1 && (data[i] = [...new Set(data[i])]));
@@ -258,39 +257,39 @@ export class Meta {                                         // bg, options
     return data;
   }
 
-  static #filter(array, value) {
+  static filter(array, value) {
     return value ? array.filter(i => i !== value) : [];
   }
 
   // --- user metadata
-  static #processUserMeta(data, js) {
+  static processUserMeta(data, js) {
     const matches = [];
     const excludeMatches = [];
     data.userMeta.split(/[\r\n]+/).forEach(item => {        // lines
-      let [,prop, value = ''] = item.trim().match(this.lineRegex) || [];
+      let [, prop, value = ''] = item.trim().match(this.lineRegex) || [];
       if (!prop) { return; }                                // continue to next
 
       switch (prop) {
         case 'disable-match':
-          data.matches = this.#filter(data.matches, value);
+          data.matches = this.filter(data.matches, value);
           break;
 
         case 'disable-exclude-match':
-          data.excludeMatches = this.#filter(data.excludeMatches, value);
+          data.excludeMatches = this.filter(data.excludeMatches, value);
           break;
 
         case 'disable-include':
-          data.includes = this.#filter(data.includes, value);
-          data.includeGlobs = this.#filter(data.includeGlobs, value);
+          data.includes = this.filter(data.includes, value);
+          data.includeGlobs = this.filter(data.includeGlobs, value);
           break;
 
         case 'disable-exclude':
-          data.excludes = this.#filter(data.excludes, value);
-          data.excludeGlobs = this.#filter(data.excludeGlobs, value);
+          data.excludes = this.filter(data.excludes, value);
+          data.excludeGlobs = this.filter(data.excludeGlobs, value);
           break;
 
         case 'disable-container':
-          data.container = this.#filter(data.container, value.toLowerCase());
+          data.container = this.filter(data.container, value.toLowerCase());
           break;
 
         case 'match':
@@ -337,7 +336,7 @@ export class Meta {                                         // bg, options
   }
 
   // --- @var. @advanced
-  static #getValue(type, str) {
+  static getValue(type, str) {
     let jp, def;
     switch (type) {
       case 'number':
@@ -352,7 +351,7 @@ export class Meta {                                         // bg, options
       case 'select':
       case 'dropdown':
         case 'image':
-        jp = App.JSONparse(str);
+        jp = App.JSONparse(str.replace(/\sEOT;/, ''));      // prevent error with empty dropdown value e.g. yes "Yes (default)*" <<<EOT  EOT;
         if (!jp) { return []; }
 
         if (Array.isArray(jp)) {
@@ -373,7 +372,7 @@ export class Meta {                                         // bg, options
   }
 
   // --- userStyle
-  static #processStyle(data, str) {
+  static processStyle(data, str) {
     // split all sections
     str.split(/@-moz-document\s+/).slice(1).forEach(moz => {
       const st = moz.indexOf('{');
@@ -381,10 +380,10 @@ export class Meta {                                         // bg, options
       if (st === -1 || end === -1) { return; }
 
       const rule = moz.substring(0, st).trim();
-      let css = moz.substring(st+1, end).trim();
+      let css = moz.substring(st + 1, end).trim();
 
       // process preprocessor
-      data.preprocessor && (css = this.#preprocessor(css, data.preprocessor, data.userVar));
+      data.preprocessor && (css = this.preprocessor(css, data.preprocessor, data.userVar));
 
       const obj = {
         matches: [],
@@ -392,10 +391,10 @@ export class Meta {                                         // bg, options
       };
 
       const r = rule.split(/\s*[\s()'",]+\s*/);             // split into pairs
-      for (let i = 0; i < r.length; i+=2) {
-        if(!r[i+1]) { break; }
+      for (let i = 0; i < r.length; i += 2) {
+        if (!r[i + 1]) { break; }
         const func = r[i];
-        const value = r[i+1];
+        const value = r[i + 1];
 
         switch (func) {
           case 'domain': obj.matches.push(`*://*.${value}/*`); break;
@@ -421,35 +420,36 @@ export class Meta {                                         // bg, options
   }
 
   // --- @preprocessor
-  static #preprocessor(str, pp, userVar = {}) {
+  static preprocessor(str, pp, userVar = {}) {
     const re = {
-      less:   (r) => new RegExp('@' + r + '\\b', 'g'),
+      less: (r) => new RegExp('@' + r + '\\b', 'g'),
       stylus: (r) => new RegExp('\\b' + r + '\\b', 'g'),
-      uso:    (r) => new RegExp('/\\*\\[\\[' + r + '\\]\\]\\*/', 'g'),
+      uso: (r) => new RegExp('/\\*\\[\\[' + r + '\\]\\]\\*/', 'g'),
     };
 
-    Object.keys(userVar).forEach(item => str = str.replace(re[pp](item), `var(--${item})`));
+    Object.keys(userVar).forEach(i => str = str.replace(re[pp](i), `var(--${i})`));
     return str;
   }
 
-  static #prepareSelect(m, p1, p2) {
-    let jp = App.JSONparse(p2) || App.JSONparse(p2.replace(/'/g, '"')); // check if single quote object
+  static prepareSelect(m, p1, p2) {
+    const jp = App.JSONparse(p2) || App.JSONparse(p2.replace(/'/g, '"')); // check if single quote object
     return jp ? p1 + JSON.stringify(jp) : '';               // remove if not valid JSON
   }
 
-  static #prepareDropdown(m, p1, p2) {
-    const obj ={};
-    const opt = p2.slice(1, -1).trim().split(/\s+EOT;/);
+  static prepareDropdown(m, p1, p2) {
+    const obj = {};
+    const opt = p2.slice(1, -1).trim().split(/\sEOT;/);     // prevent error with empty dropdown value e.g. yes "Yes (default)*" <<<EOT EOT;
     opt.forEach(item => {
       if (!item.trim()) { return; }
-      const [, id, label, valueString] = item.match(/(\S+)\s+"([^<]+)"\s+<<<EOT\s*([\S\s]+)/);
-      label && (obj[label] = valueString);
+      const [, id, label, valueString] = item.match(/(\S+)\s+"([^<]+)"\s+<<<EOT\s*([\S\s]+)/) || [];
+      label && (obj[label] = valueString.trim());
     });
+
     return Object.keys(obj)[0] ? p1 + JSON.stringify(obj) : '';
   }
 
-  static #prepareImage(m, p1, p2) {
-    const obj ={};
+  static prepareImage(m, p1, p2) {
+    const obj = {};
     const opt = p2.slice(1, -1).trim().split(/[\r\n]+/);
     opt.forEach(item => {
       item = item.trim();
@@ -460,7 +460,7 @@ export class Meta {                                         // bg, options
     return Object.keys(obj)[0] ? p1 + JSON.stringify(obj) : '';
   }
 
-  static #convert(inc, mch, glob, js) {
+  static convert(inc, mch, glob, js) {
     const newInc = [];
     inc.forEach(item => {
       // keep regex in includes/excludes, rest in includeGlobs/excludeGlobs, only for userScript
@@ -472,7 +472,7 @@ export class Meta {                                         // bg, options
         glob.push(item);
       }
       else {
-        const converted = this.#convertPattern(item);
+        const converted = this.convertPattern(item);
         converted ? mch.push(converted) : glob.push(item);
       }
     });
@@ -480,7 +480,7 @@ export class Meta {                                         // bg, options
   }
 
   // --- attempt to convert to match pattern
-  static #convertPattern(p) {
+  static convertPattern(p) {
     // test match pattern validity
     if (this.validPattern(p)) { return p; }
 
@@ -534,7 +534,7 @@ export class Meta {                                         // bg, options
           /^file:\/\/\/.+$/i.test(p);
   }
 
-  static #checkOverlap(arr) {
+  static checkOverlap(arr) {
     if (arr.includes('<all_urls>')) {
       return ['<all_urls>'];
     }

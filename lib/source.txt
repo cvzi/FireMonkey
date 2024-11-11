@@ -14,9 +14,8 @@ https://github.com/CSSLint/csslint/blob/v1.0.3/dist/csslint.js
 https://github.com/beautify-web/js-beautify
 
 Web Library CDN
-https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.8/beautify.js
-https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.8/beautify-css.js
-
+https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.9/beautify.js
+https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.9/beautify-css.js
 
 js-beautify is also used in Firefox
 resource://devtools/shared/jsbeautify/src/beautify-css.js

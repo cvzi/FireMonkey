@@ -8,20 +8,20 @@ export class PSL {
       subdomain: '',                                        // parts before sld
       domain: hostname,                                     // sld + tld
       sld: parts[0],                                        // Second level domain
-      tld: parts[parts.length-1]                            // Top level domain
-    }
+      tld: parts[parts.length - 1]                          // Top level domain
+    };
 
     if (parts.length > 2) {
       let i = 0;
       parts[0] === 'www' && i++;                            // skip www
-      for (; i < parts.length-2; i++) {
-        if (list.includes(` ${parts.slice(i+1).join('.')} `)) { break; } // found tld
+      for (; i < parts.length - 2; i++) {
+        if (list.includes(` ${parts.slice(i + 1).join('.')} `)) { break; } // found tld
       }
 
       obj.subdomain = parts.slice(0, i).join('.');
       obj.domain = parts.slice(i).join('.');
       obj.sld = parts[i];
-      obj.tld = parts.slice(i+1).join('.');
+      obj.tld = parts.slice(i + 1).join('.');
     }
 
     return obj;

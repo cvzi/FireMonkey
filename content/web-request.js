@@ -11,7 +11,7 @@ class WebRequest {
   }
 
   static onBeforeSendHeaders(e) {
-    if(!e.originUrl?.startsWith(this.FMUrl)) { return; }    // not from FireMonkey
+    if (!e.originUrl?.startsWith(this.FMUrl)) { return; }    // not from FireMonkey
 
     const cookies = [];
     const idx = [];

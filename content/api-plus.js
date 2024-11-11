@@ -1,4 +1,8 @@
+/* global importBridge */
+/* eslint-disable no-global-assign */
+
 // unsafeWindow implementation
+// eslint-disable-next-line no-unused-vars
 const unsafeWindow = window.wrappedJSObject;
 
 // Mapping to window object as a temporary workaround for

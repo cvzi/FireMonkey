@@ -1,3 +1,5 @@
+/* global CodeMirror, js_beautify, css_beautify */
+
 import {pref, App} from './app.js';
 import {ProgressBar} from './progress-bar.js';
 import {ImportExport} from './import-export.js';
@@ -10,7 +12,7 @@ import './cm-config.js';
 import './log.js';
 import './i18n.js';
 
-// ---------- User Preference ------------------------------
+// ---------- User Preferences -----------------------------
 await App.getPref();
 
 // ---------- Options --------------------------------------
@@ -47,15 +49,15 @@ class Options {
 
   static check() {
     // --- check Global Script Exclude Matches
-    if(!Pattern.validate(this.globalScriptExcludeMatches)) { return; }
+    if (!Pattern.validate(this.globalScriptExcludeMatches)) { return; }
 
     // Custom CodeMirror Options
     const cmOptionsNode = document.querySelector('#cmOptions');
     cmOptionsNode.value = cmOptionsNode.value.trim();
     if (cmOptionsNode.value) {
-      let cmOptions = App.JSONparse(cmOptionsNode.value);
+      const cmOptions = App.JSONparse(cmOptionsNode.value);
       if (!cmOptions) {
-        App.notify(browser.i18n.getMessage('jsonError')) ;
+        App.notify(browser.i18n.getMessage('jsonError'));
         return;
       }
       // remove disallowed
@@ -80,7 +82,7 @@ class Options {
     .then(data => {
       // FireMonkey has userscripts which are not in default pref keys
       Object.keys(data).forEach(item =>
-        (pref.hasOwnProperty(item) || item.startsWith('_')) && (pref[item] = data[item]));
+        (Object.hasOwn(pref, item) || item.startsWith('_')) && (pref[item] = data[item]));
       Options.process();                                    // set options after the pref update
       Script.process();                                     // update page display
     })
@@ -136,7 +138,6 @@ class Script {
 
     window.addEventListener('beforeunload', e =>
       this.unsavedChanges() ? e.preventDefault() : this.box.value = '');
-
 
     this.template = {
       js:
@@ -206,7 +207,6 @@ class Script {
     // --- sidebar
     this.sidebar = document.querySelector('#sidebar');
 
-
     // --- script storage changes
     browser.storage.onChanged.addListener((changes, area) => { // Change Listener
       area === 'local' && Object.keys(changes).forEach(item => { // local only, not for sync
@@ -237,16 +237,17 @@ class Script {
   }
 
   static processButtons(e) {
-    const action = e.target.dataset.i18n;
+    const action = e.target.dataset.i18n.split('|')[0];
     switch (action) {
       case 'saveScript': return this.saveScript();
       case 'update': return this.updateScript();
-      case 'delete|title': return this.deleteScript();
-      // case 'newJS':
-      case 'newJS|title': return this.newScript('js');
-      // case 'newCSS':
-      case 'newCSS|title': return this.newScript('css');
-      case 'beautify|title': return this.beautify();
+      case 'delete': return this.deleteScript();
+
+      case 'newJS':
+      case 'newCSS':
+        return this.newScript(action);
+
+      case 'beautify': return this.beautify();
       case 'saveTemplate': return this.saveTemplate();
       case 'export': return this.exportScript();
       case 'exportAll': return this.exportScriptAll();
@@ -262,7 +263,7 @@ class Script {
   static process() {
     this.navUL.textContent = '';                            // clear data
 
-    App.getIds(pref).sort(Intl.Collator().compare).forEach(item => this.addScript(pref[item]));
+    App.getIds(pref).sort(Intl.Collator().compare).forEach(i => this.addScript(pref[i]));
     this.navUL.appendChild(this.docFrag);
 
     if (this.box.id) {                                      // refresh previously loaded content
@@ -303,7 +304,6 @@ class Script {
         globals: {
           GM: false,
           GM_getValue: false, GM_setValue: false, GM_deleteValue: false, GM_listValues: false,
-          GM_getValues: false, GM_setValues: false, GM_deleteValues: false,
           GM_addValueChangeListener: false, GM_removeValueChangeListener: false,
 
           GM_addElement: false, GM_addScript: false, GM_addStyle: false, GM_download: false,
@@ -364,9 +364,9 @@ class Script {
 
     // Custom CodeMirror Options
     const cmOptions = App.JSONparse(pref.cmOptions) || {};
-    Object.keys(cmOptions).forEach(item => !['jshint', 'extraKeys'].includes(item) && (options[item] = cmOptions[item]));
-    cmOptions.jshint && Object.keys(cmOptions.jshint).forEach(item => jshint[item] = cmOptions.jshint[item]);
-    cmOptions.extraKeys && Object.keys(cmOptions.extraKeys).forEach(item => options.extraKeys[item] = cmOptions.extraKeys[item]);
+    Object.keys(cmOptions).forEach(i => !['jshint', 'extraKeys'].includes(i) && (options[i] = cmOptions[i]));
+    cmOptions.jshint && Object.keys(cmOptions.jshint).forEach(i => jshint[i] = cmOptions.jshint[i]);
+    cmOptions.extraKeys && Object.keys(cmOptions.extraKeys).forEach(i => options.extraKeys[i] = cmOptions.extraKeys[i]);
     // use Tab instead of spaces
     if (cmOptions.indentWithTabs) {
       delete cmOptions.extraKeys.Tab;
@@ -408,12 +408,12 @@ class Script {
     const nf = new Intl.NumberFormat();
     const stats = [];
 
-    stats.push('Size ' + nf.format((text.length/1024).toFixed(1)) + ' KB');
+    stats.push('Size ' + nf.format((text.length / 1024).toFixed(1)) + ' KB');
     stats.push('Lines ' + nf.format(this.cm.lineCount()));
     // stats.push(/\r\n/.test(text) ? 'DOS' : 'UNIX');
 
     const storage = this.storage.value.trim().length;
-    storage && stats.push('Storage ' + nf.format((storage/1024).toFixed(1)) + ' KB');
+    storage && stats.push('Storage ' + nf.format((storage / 1024).toFixed(1)) + ' KB');
 
     const tab = text.match(/\t/g);
     tab && stats.push('Tabs ' + nf.format(tab.length));
@@ -445,7 +445,8 @@ class Script {
 
       case 'wrapIIFE':
         if (!this.legend.classList.contains('js')) { return; } // only for JS
-        text = ['(() => { ', this.cm.getValue(), '\n\n})();'].join('');
+
+        text = '(() => { ' + this.cm.getValue() + '\n\n})();';
         this.cm.setValue(text);
         this.makeStats(text);
         break;
@@ -456,7 +457,7 @@ class Script {
     if (!this.cm) { return; }
 
     const options = {
-      indent_size: this.cm.getOption('tabSize')
+      "indent_size": this.cm.getOption('tabSize')
     };
 
     let text = this.cm.getValue();
@@ -465,19 +466,20 @@ class Script {
     this.makeStats(text);
   }
 
-  static newScript(type) {
+  static newScript(id) {
+    const type = id === 'newJS' ? 'js' : 'css';
     const {box, legend} = this;
     this.enable.checked = true;
-    document.querySelector('aside li.on')?.classList.remove('on');
+    document.querySelectorAll('aside li.on').forEach(i => i.classList.remove('on')); // remove on, single or multi-select
 
     this.cm?.save();                                        // save CodeMirror to textarea
-    if(this.unsavedChanges()) { return; }
+    if (this.unsavedChanges()) { return; }
     this.cm?.toTextArea();                                  // reset CodeMirror
 
     box.id = '';
     legend.textContent = '';
     legend.className = type;
-    legend.textContent = browser.i18n.getMessage(type === 'js' ? 'newJS' : 'newCSS');
+    legend.textContent = browser.i18n.getMessage(id);
     this.userMeta.value = '';
     this.storage.value = '';
 
@@ -536,12 +538,12 @@ class Script {
     }
 
     // --- reset others
-    document.querySelectorAll('aside li.on').forEach(item => item !== li && item.classList.remove('on'));
+    document.querySelectorAll('aside li.on').forEach(i => i !== li && i.classList.remove('on'));
 
     // --- if showing another page
     Nav.get('script');
     this.cm?.save();                                        // save CodeMirror to textarea
-    if(this.unsavedChanges()) {
+    if (this.unsavedChanges()) {
       li.classList.remove('on');
       box.id && document.getElementById(box.id)?.classList.add('on');
       return;
@@ -589,7 +591,7 @@ class Script {
     const output = document.createElement('output');
 
     Object.entries(pref[id].userVar || {}).forEach(([key, value]) => {
-      if (!value.hasOwnProperty('user')) { return; }        // skip
+      if (!Object.hasOwn(value, 'user')) { return; }        // skip
       const li = tmp.cloneNode(true);
       const elem = li.children;
       switch (value.type) {
@@ -668,11 +670,11 @@ class Script {
   }
 
   static resetUserVar() {
-    if(!this.userVar.children[0]) { return; }
+    if (!this.userVar.children[0]) { return; }
 
     this.userVar.dataset.default = 'true';
     this.userVar.querySelectorAll('input, select').forEach(item => {
-      let val = item.type === 'checkbox' ? item.checked + '' : item.value;
+      const val = item.type === 'checkbox' ? item.checked + '' : item.value;
       if (val !== item.dataset.default) {
         switch (item.type) {
           case 'checkbox':
@@ -703,7 +705,7 @@ class Script {
       case !text:
       case !box.id && text === this.noSpace(pref.template.js || this.template.js):
       case !box.id && text === this.noSpace(pref.template.css || this.template.css):
-      case  box.id && text === this.noSpace(pref[box.id].js + pref[box.id].css) &&
+      case box.id && text === this.noSpace(pref[box.id].js + pref[box.id].css) &&
                 this.userMeta.value.trim() === (pref[box.id].userMeta || ''):
         return false;
 
@@ -929,8 +931,6 @@ class Script {
     pref[id] = data;                                        // save to pref
     browser.storage.local.set({[id]: pref[id]});            // update saved pref
 
-
-
     this.cm.setValue('');                                   // clear box avoid unsavedChanges warning
     this.process();                                         // update page display
   }
@@ -948,7 +948,7 @@ class Script {
 
     [...e.target.files].forEach(file => {
       switch (true) {
-        //case !file: App.notify(browser.i18n.getMessage('error')); return;
+        // case !file: App.notify(browser.i18n.getMessage('error')); return;
         case !['text/css', 'application/x-javascript'].includes(file.type): // check file MIME type CSS/JS
           App.notify(browser.i18n.getMessage('fileTypeError'));
           return;
@@ -981,7 +981,7 @@ class Script {
     }
 
     // --- log message to display in Options -> Log
-    const message = pref[id] ? `Updated version ${pref[id].version} ➜ ${data.version}` : `Installed version ${data.version}`
+    const message = pref[id] ? `Updated version ${pref[id].version} ➜ ${data.version}` : `Installed version ${data.version}`;
     App.log(data.name, message, '', data.updateURL);
 
     pref[id] = data;                                        // save to pref
@@ -989,7 +989,7 @@ class Script {
 
     // --- update storage after all files are processed
     this.fileLength--;                                      // one less file to process
-    if(this.fileLength) { return; }                         // not 0 yet
+    if (this.fileLength) { return; }                         // not 0 yet
 
     this.process();                                         // update page display
     browser.storage.local.set(this.obj);                    // update saved pref
@@ -1036,7 +1036,7 @@ class Script {
         sec.domains?.forEach(i => r.push(`domain('${i}')`));
         sec.regexps?.forEach(i => r.push(`regexp('${i}')`));
 
-        r[0] && (text += '\n\n@-moz-document ' + r.join(', ') +' {\n  ' + sec.code + '\n}');
+        r[0] && (text += '\n\n@-moz-document ' + r.join(', ') + ' {\n  ' + sec.code + '\n}');
       });
 
       const data = Meta.get(text, pref);
