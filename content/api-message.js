@@ -24,7 +24,7 @@ export class OnMessage {
     switch (api) {
       // ---------- internal use only (not GM API) ---------
       case 'log':
-        return App.log(name, e.message, e.type);
+        return App.log(name, e.message, e.type, e.updateURL); // need updateURL for install.js
 
       // ---------- GM API ---------------------------------
 
@@ -66,7 +66,7 @@ export class OnMessage {
           cookieStoreId: storeId && storeId !== 'firefox-private' ? storeId : 'firefox-default', // Firefox 92 (Released 2021-09-07)
           incognito: sender.tab.incognito
         })
-        .catch(logError);
+        .catch(e => e.message !== 'Download canceled by the user' && logError(e)); // filter cancellation logging
 
       case 'notification':
         // Promise with notification's ID
@@ -112,7 +112,7 @@ export class OnMessage {
   static async addCookie(url, headers, storeId) {
     // add contextual cookies, only in container/incognito
     const cookies = await browser.cookies.getAll({url, storeId});
-    const str = cookies && cookies.map(item => `${item.name}=${item.value}`).join('; ');
+    const str = cookies && cookies.map(i => `${i.name}=${i.value}`).join('; ');
     str && (headers['FM-Contextual-Cookie'] = str);
   }
 

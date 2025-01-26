@@ -1,4 +1,4 @@
-﻿// ---------- Locale Maker ---------------------------------
+// ---------- Locale Maker ---------------------------------
 // Locale Maker requires "downloads" permission to save the generated locale in folders
 // minimum version Firefox 93 (released 2021-10-05)
 
@@ -20,7 +20,7 @@ class LocaleMaker {
     });
 
     // --- main content
-    this.content = document.querySelector('div.content')
+    this.content = document.querySelector('div.content');
 
     // --- help popup
     const details = document.querySelector('details');
@@ -42,7 +42,7 @@ class LocaleMaker {
 
       e.preventDefault();
       const idx = [...this.inputs].indexOf(e.target);
-      this.inputs.forEach((item, index) => index >= idx && lines[0] && (item.value = lines.shift().trim()));
+      this.inputs.forEach((i, index) => index >= idx && lines[0] && (i.value = lines.shift().trim()));
     });
   }
 
@@ -111,7 +111,7 @@ class LocaleMaker {
   }
 
   static setLocale(data) {
-    this.inputs.forEach(item => item.value = data[item.id] ? this.showSpecial(data[item.id].message) : '');
+    this.inputs.forEach(i => i.value = data[i.id] ? this.showSpecial(data[i.id].message) : '');
   }
 
   static showSpecial(str) {
@@ -131,10 +131,10 @@ class LocaleMaker {
         return;
     }
 
-    const reader  = new FileReader();
+    const reader = new FileReader();
     reader.onloadend = () => {
       try { this.setLocale(JSON.parse(reader.result)); }    // Parse JSON
-      catch(e) { alert(e.message ); }                       // display the error
+      catch (e) { alert(e.message); }                       // display the error
     };
     reader.onerror = () => alert('There was an error with reading the file.');
     reader.readAsText(file);
@@ -145,7 +145,7 @@ class LocaleMaker {
     if (!defaultLocale) { return; }
 
     let data = this.deepClone(defaultLocale);
-    this.inputs.forEach(item => item.value && (data[item.id].message = JSON.parse(`"${item.value}"`))); // update from inputs
+    this.inputs.forEach(i => i.value && (data[i.id].message = JSON.parse(`"${i.value}"`))); // update from inputs
     const filename = this.select.value ? this.select.value + '/messages.json' : 'messages.json';
     data = JSON.stringify(data, null, 2);
     this.saveFile({data, filename});
