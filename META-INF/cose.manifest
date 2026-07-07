@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 
 Name: manifest.json
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: lqfViRTgTMHKclKuE7DBabT/ZKs=
-SHA256-Digest: BP4yan8Y1cAVvpQHi5Jw9nV6uya+SEAbBOLNkYDPLFc=
+SHA1-Digest: M39a7r1o9Gdz3qpMWqfPpsBOzMw=
+SHA256-Digest: 46vcHvDGw84Qmo5wyjtcYkFk3+CP5Yq3vAW4IfcLka4=
 
 Name: content/install.js
 Digest-Algorithms: SHA1 SHA256
@@ -17,8 +17,8 @@ SHA256-Digest: bPBO6ntDdECde59+HxNe+VQT+u/Fmux8kvV1xlB7Tsc=
 
 Name: content/api-gm.js
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: KBqgsBcLyjC+tCLwz6FVlHXocyk=
-SHA256-Digest: DCo+kdVIJYefCxq0u5D5xSXymkPQvCayGZkaKYKtCf4=
+SHA1-Digest: MIEwXh5jRA7DnA97rCSDG+DO6A0=
+SHA256-Digest: L59DgKtepjkhdypMp1ZVSP/gM2+67HsBCnauhNA6PVw=
 
 Name: content/default.css
 Digest-Algorithms: SHA1 SHA256
@@ -287,8 +287,8 @@ SHA256-Digest: iV9I+atrUfv3YRJAEAntV9BWGCg4wXDsPSEauOTb+sE=
 
 Name: content/about.html
 Digest-Algorithms: SHA1 SHA256
-SHA1-Digest: jNk43nfhSXmC3W/juvgDi/+8nGk=
-SHA256-Digest: qwgiPbIb3E5N0iU1qFZQiGbq1jNAqyDKEGWZzl9GOts=
+SHA1-Digest: /ckRXcfV4Tq0iiqNMi4NjnST10s=
+SHA256-Digest: +im7pADfg1n3ZZf99eqhpdipXWczlRu5k55rqNRP4dQ=
 
 Name: image/help.svg
 Digest-Algorithms: SHA1 SHA256
