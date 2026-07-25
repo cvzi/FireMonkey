@@ -13,7 +13,7 @@ class ShowLog {
     this.aTemp.textContent = '🕓';
     this.aTemp.title = 'History';
 
-    const logSize = document.querySelector('#logSize');
+    const logSize = document.getElementById('log-size');
     logSize.value = localStorage.getItem('logSize') || 100;
     logSize.addEventListener('change', () => localStorage.setItem('logSize', logSize.value));
 

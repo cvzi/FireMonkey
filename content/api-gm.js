@@ -27,6 +27,13 @@ globalThis.initUserScript = data => {
 
 class GM {
 
+  // Trusted Types (Firefox 148)
+  static #policy = trustedTypes.createPolicy('fm-policy', {
+    createHTML: i => i,
+    createScript: i => i,
+    createScriptURL: i => i,
+  });
+
   static #script = {};
 
   // ---------- map GM functions ---------------------------
@@ -347,8 +354,7 @@ class GM {
       if (text) {
         this.#script.injectInto !== 'page' && (text += `${this.#script.sourceURL}/${crypto.randomUUID()}.js`);
         // Trusted Types (Firefox 148)
-        const p = trustedTypes.createPolicy('fm-policy', {createScript: s => s});
-        attributes.textContent = p.createScript(text);
+        attributes.textContent = this.#policy.createScript(text);
       }
     }
 
@@ -356,11 +362,12 @@ class GM {
       ['textContent', 'innerText', 'innerHTML'].includes(key) ? elem[key] = value : elem.setAttribute(key, value));
 
     try {
-      // append() returns undefined, appendChild() returns the node
-      const el = script ? parentElement.append(elem) : parentElement.appendChild(elem);
+      parentElement.append(elem);
+      if (!script) {
+        return elem;
+      }
       // userscript may track UUID in element's textContent
-      script && el.remove();
-      return el;
+      elem.remove();
     }
     catch (e) {
       this.#log(`addElement ➜ ${tagName} ${e}`);
@@ -635,7 +642,11 @@ class GM {
     if (!response) { throw 'There was an error with the xmlHttpRequest request.'; }
 
     // convert text responseXML to XML DocumentFragment
-    response.responseXML &&= document.createRange().createContextualFragment(response.responseXML);
+    if (response.responseXML) {
+      // Trusted Types (Firefox 148)
+      const text = this.#policy.createHTML(response.responseXML);
+      response.responseXML = document.createRange().createContextualFragment(text);
+    }
 
     return response;
   }
