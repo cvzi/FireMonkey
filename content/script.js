@@ -72,10 +72,10 @@ export class Script {
     // contentScripts API: userScript (inject-into page) | userCSS | userStyle
     const api = (script.css || options.world) ? browser.contentScripts : browser.userScripts;
     try {
-      // catch error thrown before the Promise reject
+      // catch error thrown before the Promise reject e.g. bad options
       api.register(options)
       .then(reg => this.registered[id] = reg)
-      .catch(e => App.log(id.substring(1), `Register ➜ ${e}`, 'error'));
+      .catch(e => App.log(id.substring(1), `Register-1 ➜ ${e}`, 'error'));
     }
     catch (e) {
       // store error message & log message to display in Options -> Log

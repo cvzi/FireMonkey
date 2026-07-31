@@ -1,3 +1,4 @@
+import {App} from './app.js';
 import {Meta} from './meta.js';
 
 export class UserScript {
@@ -174,12 +175,12 @@ export class UserScript {
             arr[index] = {code};
           }
         })
-        .catch(() => {})
-        // catch() to suppress error
+        .catch(e => App.log(name, `@require ${url} ➜ ${e}`, 'error'))
       ));
 
-      options.js.push(...arr);
-      pageScripts.push(...pageArr);
+      // remove failed @require from array index
+      options.js.push(...arr.filter(Boolean));
+      pageScripts.push(...pageArr.filter(Boolean));
     }
 
     // --- add @resource for GM getResourceText
@@ -191,9 +192,8 @@ export class UserScript {
       await Promise.all(array.map(([key, url]) =>
         fetch(url)
         .then(r => r.text())
-        .then(text => options.resourceData[key] = text)
-        .catch(() => {})
-        // catch() to suppress error
+        .then(text => options.scriptMetadata.resourceData[key] = text)
+        .catch(e => App.log(name, `@require ${url} ➜ ${e}`, 'error'))
       ));
     }
 

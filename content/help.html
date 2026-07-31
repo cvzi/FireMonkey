@@ -933,7 +933,17 @@
       <dd>Display a new Script Template that you can edit and Save</dd>
       <dd>New script/CSS starts disabled</dd>
 
-      <dt><img src="../image/bin.svg" alt=""> Delete</dt>
+      <dt><img src="../image/edit.svg" alt=""> Text Editor</dt>
+      <dd>Open plain Text Editor helper
+        <ul>
+          <li>Opens only if the main editor has content</li>
+          <li><kbd>Esc</kbd> key on desktop platforms, or a "back" or "dismiss" gesture on mobile platforms, closes the Text Editor without any changes to the main editor</li>
+          <li><kbd>&lt; back</kbd> transfers the text from the Text Editor to the main editor</li>
+        </ul>
+
+      </dd>
+
+      <dt><img src="../image/delete.svg" alt=""> Delete</dt>
       <dd>Delete the currently displaying Script/CSS after confirmation  <em>(or multi-selected)</em></dd>
     </dl>
 
@@ -3098,15 +3108,15 @@ Loading module from “https://raw.githubusercontent.com/erosman/psl/main/psl.js
 <pre>
 <span class="comment">// get the entire storage</span>
 <span class="keyword">const</span> storage = <span class="keyword">await</span> <span class="function">GM.getValues</span>();
-<span class="comment">// return {key: value, key2: value2, ...}</span>
+<span class="comment">// returns {key: value, key2: value2, ...}</span>
 
 <span class="comment">// get values for array of keys</span>
 <span class="keyword">const</span> values = <span class="keyword">await</span> <span class="function">GM.getValues</span>([key, key2, ...]);
-<span class="comment">// return {key: value, key2: value2, ...}</span>
+<span class="comment">// returns {key: value, key2: value2, ...}</span>
 
 <span class="comment">// get values for object with default values</span>
 <span class="keyword">const</span> values = <span class="keyword">await</span> <span class="function">GM.getValues</span>({key: default, key2: default2, ...});
-<span class="comment">// return {key: value || default, key2: value2 || default2, ...}</span>
+<span class="comment">// returns {key: value || default, key2: value2 || default2, ...}</span>
 </pre>
 
 
@@ -3540,7 +3550,7 @@ style.textContent = <span class="string">`... css ...`</span>;
 
 <pre>
 <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">GM.fetch</span>(url [, options]);
-<span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">GM_fetch</span>(url [, options]);
+<span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">GM_fetch</span>(url [, options]);  <em>(deprecated v3.4)</em>
 </pre>
 
 
@@ -4462,8 +4472,11 @@ console.log(<span class="object">window</span>.wrappedJSObject.foo);  <span clas
 
 <pre>
 <span class="comment">// response Object</span>
-<span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">GM.xmlHttpRequest</span>({url}); <span class="comment">// note uppercase H</span>
-<span class="function">GM_xmlhttpRequest</span>({url, onload}); <span class="comment">// note lowercase h</span>
+<span class="keyword">const</span> response = <span class="keyword">await</span> <span class="function">GM.xmlHttpRequest</span>({url});
+<span class="comment">// returns a Promise (note the uppercase H)</span>
+
+<span class="function">GM_xmlhttpRequest</span>({url, onload});
+<span class="comment">// returns a callback function onload|onerror|ontimeout|onabort (note the lowercase h)</span>
 </pre>
 
 
@@ -4492,11 +4505,6 @@ console.log(<span class="object">window</span>.wrappedJSObject.foo);  <span clas
 
   anonymous,                <span class="comment">// Optional, true/false (default)
                                if true, no cookie will be sent with the request</span>
-
-  onload,                   <span class="comment">// callback function</span>
-  onerror,                  <span class="comment">// callback function</span>
-  onabort,                  <span class="comment">// callback function</span>
-  ontimeout,                <span class="comment">// callback function</span>
 });
 </pre>
 
@@ -4505,7 +4513,6 @@ console.log(<span class="object">window</span>.wrappedJSObject.foo);  <span clas
 
     <p class="caption">Response</p>
 <pre>
-<span class="comment">// onload|onerror|ontimeout|onabort, or Promise</span>
 {
   readyState,
   response,

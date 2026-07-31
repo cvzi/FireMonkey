@@ -334,6 +334,35 @@ ul.user-var {
 }
 /* ----- /user var ----- */
 
+/* ----- dialog ----- */
+dialog {
+  grid-template-rows: auto 1fr;
+  row-gap: 0.5em;
+  width:100vw;
+  height: 100vh;
+  border-width: 1px;
+
+  &:open {
+    display: grid;
+  }
+
+  button {
+    justify-self: end;
+  }
+
+  textarea {
+    font-size: 1.1em;
+    outline: none;
+    padding: 0.5em;
+    resize: none;
+
+    &:hover {
+      background-color: var(--bg-alt) !important;
+    }
+  }
+}
+/* ----- dialog ----- */
+
 /* ----- show/hide elements ----- */
 body.android {
     --aside: 10rem;

@@ -35,6 +35,7 @@
   "upload": { "message": "Upload" },
   "uploadUrlError": { "message": "Script/CSS does not have an uploadURL." },
   "uploadSuccess": { "message": "Script/CSS uploaded." },
+  "textEditor": { "message": "Text Editor" },
 
 
   "newJS": { "message": "New UserScript" },

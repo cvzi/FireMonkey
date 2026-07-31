@@ -647,7 +647,7 @@ class GM {
       const text = this.#policy.createHTML(response.responseXML);
       response.responseXML = document.createRange().createContextualFragment(text);
     }
-
+    delete response.callback;
     return response;
   }
 
